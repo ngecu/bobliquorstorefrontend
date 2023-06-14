@@ -24,7 +24,7 @@ export const listCategories = () => async (dispatch) => {
   try {
     dispatch({ type: CATEGORY_LIST_REQUEST });
 
-    const { data } = await axios.get('/api/categories');
+    const { data } = await axios.get('https://bobliquorstoreapi.onrender.com/api/categories');
 
     dispatch({
       type: CATEGORY_LIST_SUCCESS,
@@ -46,7 +46,7 @@ export const getCategoryDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: CATEGORY_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/api/categories/${id}`);
+    const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/categories/${id}`);
 
     dispatch({
       type: CATEGORY_DETAILS_SUCCESS,
@@ -79,7 +79,7 @@ export const createCategory = (categoryData) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post('/api/categories', categoryData, config);
+    const { data } = await axios.post('https://bobliquorstoreapi.onrender.com/api/categories', categoryData, config);
 
     dispatch({
       type: CATEGORY_CREATE_SUCCESS,
@@ -113,7 +113,7 @@ export const updateCategory = (categoryData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      `/api/categories/${categoryData._id}`,
+      `https://bobliquorstoreapi.onrender.com/api/categories/${categoryData._id}`,
       categoryData,
       config
     );
@@ -148,7 +148,7 @@ export const deleteCategory = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`/api/categories/${id}`, config);
+    await axios.delete(`https://bobliquorstoreapi.onrender.com/api/categories/${id}`, config);
 
     dispatch({ type: CATEGORY_DELETE_SUCCESS });
   } catch (error) {
