@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Container } from 'react-bootstrap'
 import Product from '../components/Product'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -39,7 +39,7 @@ const HomeScreen = ({ match }) => {
         <>
         {loading ? (
         <Skeleton active />):(
-          <img src="https://tpc.googlesyndication.com/simgad/6694094145406526054" className='w-100' />
+          <img src="https://www.oaks.delivery/wp-content/uploads/banner-1.png" className='w-100' />
         )
         }
         </>
@@ -49,7 +49,18 @@ const HomeScreen = ({ match }) => {
           Go Back
         </Link>
       )}
+      <Container>
       <>
+
+      <Row>
+          {categories && categories.map((category)=>(
+            <Col key={category._id} sm={12} md={6} lg={4} xl={3}>
+            <img src={category.image}/>
+          </Col>
+          ))}
+
+        </Row>
+        
       {!keyword ? <h1>Latest Products</h1> : <h1>{keyword} Results</h1> }
       </>
       {loading ? (
@@ -58,6 +69,7 @@ const HomeScreen = ({ match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
+      
           <Row>
             {products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
@@ -87,7 +99,7 @@ const HomeScreen = ({ match }) => {
 </>
 </>
 )) }
-
+</Container>
     </>
   )
 }

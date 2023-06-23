@@ -51,3 +51,7 @@ h2 {
     font-size: 2.5vw;
   }
 }
+
+.bg-dark {
+  background-color: #D21812 !important;
+}
