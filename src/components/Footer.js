@@ -144,8 +144,8 @@ const Footer = () => {
 
       {/* Copyright */}
       <div className="text-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
-        © 2023
-        <a className="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+       
+        <a className="text-reset fw-bold" href="">DevNgecu</a> © 2023
       </div>
       {/* Copyright */}
     </footer>

@@ -6,6 +6,7 @@ import { addToCart, removeFromCart } from '../actions/cartActions';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from './Message';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { addToWish } from '../actions/wishActions';
 
 const Product = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -35,6 +36,12 @@ const Product = ({ product }) => {
 
 
   const [open, setOpen] = useState(false);
+
+  const handleWishlistAdd = (product)=>{
+    console.log("prodcut addeing to wishlist")
+    const productId = product._id
+    dispatch(addToWish(productId, 1))
+  }
 
   const showDrawer = (product) => {
     const productId = product._id
@@ -75,7 +82,7 @@ const Product = ({ product }) => {
       <div className="product-image">
         <Card.Img variant="top" src={product.image} alt={product.name} />
         {isHovered && (
-          <div className="wishlist-icon">
+          <div className="wishlist-icon" onClick={(e)=>handleWishlistAdd(product)}>
             <i className="fas fa-heart"></i>
           </div>
         )}

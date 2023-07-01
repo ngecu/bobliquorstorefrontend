@@ -22,6 +22,7 @@ import CategoryListScreen from './screens/CategoryListScreen'
 import CategoryEditScreen from './screens/CategoryEditScreen'
 import { useSelector } from 'react-redux'
 import CategoryProductsScreen from './screens/CategoryProductsScreen'
+import WishlistScreen from './screens/WishlistScreen'
 
 const App = () => {
   const categoryList = useSelector((state) => state.categoryList)
@@ -36,6 +37,7 @@ const App = () => {
           <Route path='/payment' component={PaymentScreen} />
           <Route path='/placeorder' component={PlaceOrderScreen} />
           <Route path='/my-account' component={LoginScreen} />
+          <Route path='/wishlist' component={WishlistScreen} />
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
           <Route path='/product/:id' component={ProductScreen} />

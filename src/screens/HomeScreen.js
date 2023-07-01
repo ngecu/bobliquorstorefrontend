@@ -79,7 +79,7 @@ const HomeScreen = ({ match }) => {
 
         </Row>
         
-      {!keyword ? <h1>New Arrivals</h1> : <h1>{keyword} Results</h1> }
+      {!keyword ? <h6>New Arrivals</h6> : <h6>{keyword} Results</h6> }
       </>
       {loading ? (
         <Loader />
@@ -87,23 +87,33 @@ const HomeScreen = ({ match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <Row className='justify-content-center'>
-            <CardDeck>
-              {products.map((product) => (
-                <Col key={product._id} sm={6} md={6} lg={4} xl={3}>
-                  <Product product={product} />
-                </Col>
-              ))}
-            </CardDeck>
-          </Row>
-          <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} />
+       <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', scrollbarWidth: 'none', '-ms-overflow-style': 'none' }}>
+  <style>
+    {`
+      div::-webkit-scrollbar {
+        width: 0.5em;
+        height: 0.5em;
+      }
+      div::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    `}
+  </style>
+  <Row className='flex-nowrap'>
+    {products.map((product) => (
+      <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className='px-1'>
+        <Product product={product} />
+      </Col>
+    ))}
+  </Row>
+</div>
         </>
       )}
 
 
 {!keyword && categories && categories.map((i,index)=>(
   <>
-  <h1>{i.name}(S)
+  <h6>{i.name}(S)
   
   <Link
                 to={`/category/${i._id}`}
@@ -112,16 +122,29 @@ const HomeScreen = ({ match }) => {
                 View All &rarr;
               </Link>
 
-  </h1>
+  </h6>
+  <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', scrollbarWidth: 'none', '-ms-overflow-style': 'none' }}>
+  <style>
+    {`
+      div::-webkit-scrollbar {
+        width: 0.5em;
+        height: 0.5em;
+      }
+      div::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    `}
+  </style>
   <Row>
   {products
     .filter((product) => product.category === i._id)
     .map((product) => (
-      <Col key={product._id} sm={12} md={6} lg={4} xl={3} className="h-100">
+      <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className="h-100">
         <Product product={product} />
       </Col>
     ))}
 </Row>
+</div>
 </>
 )) }
 </Container>
