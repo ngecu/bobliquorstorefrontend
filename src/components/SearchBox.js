@@ -18,10 +18,10 @@ const SearchBox = ({ history }) => {
   }
 
   return (
-  <Form>
+  <Form className='w-100'>
 
 <Search
-      placeholder="Input Product Here"
+      placeholder="Search Products"
       
       size="large"
       onChange={(e) => setKeyword(e.target.value)}

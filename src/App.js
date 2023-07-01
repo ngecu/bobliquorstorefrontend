@@ -20,24 +20,30 @@ import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import CategoryListScreen from './screens/CategoryListScreen'
 import CategoryEditScreen from './screens/CategoryEditScreen'
+import { useSelector } from 'react-redux'
+import CategoryProductsScreen from './screens/CategoryProductsScreen'
 
 const App = () => {
+  const categoryList = useSelector((state) => state.categoryList)
+  const { categories } = categoryList
   return (
     <Router>
-      <Header />
+      <Header  categories={categories}/>
       <main>
-        
+      <Route path='/category/:id' component={CategoryProductsScreen} />
           <Route path='/order/:id' component={OrderScreen} />
           <Route path='/shipping' component={ShippingScreen} />
           <Route path='/payment' component={PaymentScreen} />
           <Route path='/placeorder' component={PlaceOrderScreen} />
-          <Route path='/login' component={LoginScreen} />
+          <Route path='/my-account' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
           <Route path='/product/:id' component={ProductScreen} />
           <Route path='/cart/:id?' component={CartScreen} />
           <Route path='/admin/userlist' component={UserListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
+
+          
           <Route
             path='/admin/productlist'
             component={ProductListScreen}
@@ -66,6 +72,8 @@ const App = () => {
             exact
           />
           <Route path='/' component={HomeScreen} exact />
+       
+
        
       </main>
       <Footer />

@@ -14,6 +14,7 @@ const CategoryEditScreen = ({ match, history }) => {
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [image,setImage] = useState('');
 
   const dispatch = useDispatch()
 
@@ -37,6 +38,7 @@ const CategoryEditScreen = ({ match, history }) => {
       } else {
         setName(category.name)
         setDescription(category.description)
+        setImage(category.image)
       }
     }
   }, [dispatch, history, categoryId, category, successUpdate])
@@ -49,7 +51,8 @@ const CategoryEditScreen = ({ match, history }) => {
       updateCategory({
         _id: categoryId,
         name,
-        description
+        description,
+        image
       })
     )
   }
@@ -86,6 +89,16 @@ const CategoryEditScreen = ({ match, history }) => {
                 placeholder='Enter description'
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='image'>
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter Image URL'
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

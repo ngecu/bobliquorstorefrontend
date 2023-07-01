@@ -2,11 +2,11 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
+import { Navbar, Nav, Container, NavDropdown, Row, Col, Dropdown } from 'react-bootstrap'
 import SearchBox from './SearchBox'
 import { logout } from '../actions/userActions'
-
-const Header = () => {
+import { Home, Favorite, AccountCircle, ShoppingCart } from '@material-ui/icons';
+const Header = ({categories}) => {
   const dispatch = useDispatch()
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -15,22 +15,28 @@ const Header = () => {
   const logoutHandler = () => {
     dispatch(logout())
   }
+  const cartItemsCount = 5; // Replace this with the actual count of cart items
 
   return (
+    <>
     <header>
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
           <LinkContainer to='/'>
-            <Navbar.Brand>Bob Liquor Store</Navbar.Brand>
+            <Navbar.Brand>Drink&Chill</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Route render={({ history }) =>   <SearchBox history={history} />} />
             <Nav className='ml-auto'>
-              <LinkContainer to='/cart'>
-                <Nav.Link>
-                  <i className='fas fa-shopping-cart'></i> Cart
-                </Nav.Link>
+           
+              <LinkContainer to='/wishlist'>
+                  <Nav.Link>
+                  <div className="icon-text-wrapper">
+        <i className="fas fa-heart"></i>
+        <span>Wishlist</span>
+      </div>
+                  </Nav.Link>
               </LinkContainer>
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id='username'>
@@ -42,9 +48,12 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <LinkContainer to='/login'>
+                <LinkContainer to='/my-account'>
                   <Nav.Link>
-                    <i className='fas fa-user'></i> Sign In
+                  <div className="icon-text-wrapper">
+                    <i className='fas fa-user'></i> 
+                    <span>Account</span>
+                  </div>
                   </Nav.Link>
                 </LinkContainer>
               )}
@@ -64,11 +73,73 @@ const Header = () => {
                   </LinkContainer>
                 </NavDropdown>
               )}
+                 <LinkContainer to='/cart'>
+                <Nav.Link>
+
+                  <div className="icon-text-wrapper">
+                    <i className='fas fa-shopping-cart'></i>
+                    <span>basket</span>
+                  </div>
+
+                </Nav.Link>
+              </LinkContainer>
+
+              <LinkContainer to='/checkout'>
+                <Nav.Link>
+
+                  <div className="icon-text-wrapper">
+                  <i class="fas fa-arrow-right"></i>
+                    {/* <i className='fas fa-shopping-cart'></i> */}
+                    <span>checkout</span>
+                  </div>
+
+                </Nav.Link>
+              </LinkContainer>
+
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
     </header>
+
+    {/* <Row>
+      <Container>
+        <div className='d-flex'>
+          <div className='w-50 d-flex'>
+          
+          {categories && categories.map((category)=>(
+              <div className='mx-2'>
+            <Dropdown>
+            <Dropdown.Toggle id="dropdown-basic">
+          
+           {category.name}
+           
+           </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+          <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+          </Dropdown.Menu>
+          </Dropdown>
+          </div>
+          ))}
+         
+          
+          </div>
+          <div className='w-50'>
+          <Nav.Link className="position-relative">
+  <i className="fas fa-shopping-cart"></i>
+  {cartItemsCount > 0 && (
+    <span className="cart-items-count">{cartItemsCount}</span>
+  )}
+</Nav.Link>
+          </div>
+        </div>
+       
+      </Container>
+      </Row> */}
+    </>
   )
 }
 

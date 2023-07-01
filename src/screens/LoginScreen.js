@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import {  Button, Row, Col, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import FormContainer from '../components/FormContainer'
 import { login } from '../actions/userActions'
+import { Checkbox, Form, Input } from 'antd'
 
 const LoginScreen = ({ location, history }) => {
   const [email, setEmail] = useState('')
@@ -28,47 +28,101 @@ const LoginScreen = ({ location, history }) => {
     e.preventDefault()
     dispatch(login(email, password))
   }
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
 
   return (
-    <FormContainer>
-      <h1>Sign In</h1>
+    <Container>
+      <h1>My Account</h1>
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId='email'>
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
-            type='email'
-            placeholder='Enter email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
 
-        <Form.Group controlId='password'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type='password'
-            placeholder='Enter password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+      <Row>
+        <Col md={6}>
+          <h3>Login</h3>
+          <Form
+           layout={"vertical"}
+    name="basic"
+    labelCol={{
+      span: 8,
+    }}
+    wrapperCol={{
+      span: 16,
+    }}
+    // style={{
+    //   maxWidth: 600,
+    // }}
+    initialValues={{
+      remember: true,
+    }}
+    onFinish={onFinish}
+    onFinishFailed={onFinishFailed}
+    autoComplete="off"
+  >
+    <Form.Item
+      label="Username"
+      name="username"
+      rules={[
+        {
+          required: true,
+          message: 'Please input your username!',
+        },
+      ]}
+    >
+      <Input />
+    </Form.Item>
 
-        <Button type='submit' variant='primary'>
-          Sign In
-        </Button>
-      </Form>
+    <Form.Item
+      label="Password"
+      name="password"
+      rules={[
+        {
+          required: true,
+          message: 'Please input your password!',
+        },
+      ]}
+    >
+      <Input.Password />
+    </Form.Item>
 
-      <Row className='py-3'>
-        <Col>
-          New Customer?{' '}
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
-            Register
-          </Link>
+    <Form.Item
+      name="remember"
+      valuePropName="checked"
+      wrapperCol={{
+        offset: 0,
+        span: 16,
+      }}
+    >
+      <Checkbox>Remember me</Checkbox>
+    </Form.Item>
+
+    <Form.Item
+      wrapperCol={{
+        offset: 0,
+        span: 16,
+      }}
+    >
+      <Button type="submit" variant='success' htmlType="submit">
+        Submit
+      </Button>
+    </Form.Item>
+  </Form>
+
+
+        </Col>
+
+        <Col md={6}>
+          <h3>Register</h3>
+
+
         </Col>
       </Row>
-    </FormContainer>
+      
+    </Container>
   )
 }
 

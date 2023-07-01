@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Container } from 'react-bootstrap'
+import { Row, Col, Container, Card } from 'react-bootstrap'
 import Product from '../components/Product'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -45,17 +45,35 @@ const HomeScreen = ({ match }) => {
         </>
        
       ) : (
-        <Link to='/' className='btn btn-light'>
+        <Container>
+        <Link to='/' className='btn btn-primary'>
           Go Back
         </Link>
+        </Container>
       )}
       <Container>
       <>
 
-      <Row>
+      <Row className='my-2'>
           {categories && categories.map((category)=>(
             <Col key={category._id} sm={12} md={6} lg={4} xl={3}>
-            <img src={category.image}/>
+                <Link to={`/category/${category._id}`}>
+                <Card>
+                
+                  <Card.Img src={category.image} variant='top' />
+               
+
+                  <Card.Body className='text-center p-0'>
+       
+          <Card.Title as='div'>
+            <strong>{category.name}</strong>
+          </Card.Title>
+
+      </Card.Body>
+
+                </Card>
+                </Link>
+            
           </Col>
           ))}
 
@@ -86,17 +104,25 @@ const HomeScreen = ({ match }) => {
       )}
 {!keyword && categories && categories.map((i,index)=>(
   <>
-  <h1>{i.name}(S)</h1>
-<>
-{products
-  .filter((product) => product.category === i._id)
-  .map((product) => (
-    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-      <Product product={product} />
-    </Col>
-  ))}
+  <h1>{i.name}(S)
+  
+  <Link
+                to={`/category/${i._id}`}
+                className="float-right"
+              >
+                View All &rarr;
+              </Link>
 
-</>
+  </h1>
+  <Row>
+  {products
+    .filter((product) => product.category === i._id)
+    .map((product) => (
+      <Col key={product._id} sm={12} md={6} lg={4} xl={3} className="h-100">
+        <Product product={product} />
+      </Col>
+    ))}
+</Row>
 </>
 )) }
 </Container>
