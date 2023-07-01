@@ -73,7 +73,7 @@ const Header = ({categories}) => {
                   </LinkContainer>
                 </NavDropdown>
               )}
-                 <LinkContainer to='/cart'>
+                 <LinkContainer to='/basket'>
                 <Nav.Link>
 
                   <div className="icon-text-wrapper">

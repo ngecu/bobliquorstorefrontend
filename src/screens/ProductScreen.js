@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
+import { Row, Col, Image, ListGroup, Card, Button, Form, Container } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -11,6 +11,7 @@ import {
   createProductReview,
 } from '../actions/productActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import Product from '../components/Product'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
@@ -58,10 +59,10 @@ const ProductScreen = ({ history, match }) => {
   }
 
   return (
-    <>
-      <Link className='btn btn-light my-3' to='/'>
+    <Container>
+      {/* <Link className='btn btn-primary my-3' to='/'>
         Go Back
-      </Link>
+      </Link> */}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -73,7 +74,7 @@ const ProductScreen = ({ history, match }) => {
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
             </Col>
-            <Col md={3}>
+            <Col md={6}>
               <ListGroup variant='flush'>
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
@@ -89,8 +90,7 @@ const ProductScreen = ({ history, match }) => {
                   Description: {product.description}
                 </ListGroup.Item>
               </ListGroup>
-            </Col>
-            <Col md={3}>
+
               <Card>
                 <ListGroup variant='flush'>
                   <ListGroup.Item>
@@ -146,10 +146,12 @@ const ProductScreen = ({ history, match }) => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
+
             </Col>
+            
           </Row>
           <Row>
-            <Col md={6}>
+            <Col md={12}>
               <h2>Reviews</h2>
               {product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant='flush'>
@@ -215,9 +217,18 @@ const ProductScreen = ({ history, match }) => {
               </ListGroup>
             </Col>
           </Row>
+
+          <Row className='flex-nowrap'>
+            You may also like...
+    {/* {products.map((product) => (
+      <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className='px-1'>
+        <Product product={product} />
+      </Col>
+    ))} */}
+  </Row>
         </>
       )}
-    </>
+    </Container>
   )
 }
 

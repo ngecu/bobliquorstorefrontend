@@ -5,7 +5,6 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScreen'
 import ProductScreen from './screens/ProductScreen'
-import CartScreen from './screens/CartScreen'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import ProfileScreen from './screens/ProfileScreen'
@@ -23,6 +22,7 @@ import CategoryEditScreen from './screens/CategoryEditScreen'
 import { useSelector } from 'react-redux'
 import CategoryProductsScreen from './screens/CategoryProductsScreen'
 import WishlistScreen from './screens/WishlistScreen'
+import BasketScreen from './screens/BasketScreen'
 
 const App = () => {
   const categoryList = useSelector((state) => state.categoryList)
@@ -41,7 +41,7 @@ const App = () => {
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
           <Route path='/product/:id' component={ProductScreen} />
-          <Route path='/cart/:id?' component={CartScreen} />
+          <Route path='/basket/:id?' component={BasketScreen} />
           <Route path='/admin/userlist' component={UserListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
 

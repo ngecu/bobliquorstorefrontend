@@ -93,7 +93,7 @@ const Product = ({ product }) => {
         )}
       </div>
       <Card.Body>
-        <Card.Title>{product.name}</Card.Title>
+        <Card.Title><Link to={`product/${product._id}`}>{product.name}</Link></Card.Title>
         <Card.Text className='my-0'>
           {discountPercentage > 0 && (
             <del>{product.price}/-</del>

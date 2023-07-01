@@ -204,3 +204,9 @@ footer{
   width: 20px;
   height: 20px;
 }
+nav{
+  line-height: 25.8833px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
