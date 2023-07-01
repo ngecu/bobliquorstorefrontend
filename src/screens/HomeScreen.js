@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Container, Card } from 'react-bootstrap'
+import { Row, Col, Container, Card, CardDeck } from 'react-bootstrap'
 import Product from '../components/Product'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -56,7 +56,7 @@ const HomeScreen = ({ match }) => {
 
       <Row className='my-2'>
           {categories && categories.map((category)=>(
-            <Col key={category._id} sm={12} md={6} lg={4} xl={3}>
+            <Col key={category._id} xs={6} sm={6} md={3} lg={3} xl={3}>
                 <Link to={`/category/${category._id}`}>
                 <Card>
                 
@@ -79,7 +79,7 @@ const HomeScreen = ({ match }) => {
 
         </Row>
         
-      {!keyword ? <h1>Latest Products</h1> : <h1>{keyword} Results</h1> }
+      {!keyword ? <h1>New Arrivals</h1> : <h1>{keyword} Results</h1> }
       </>
       {loading ? (
         <Loader />
@@ -87,21 +87,20 @@ const HomeScreen = ({ match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-      
-          <Row>
-            {products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
+          <Row className='justify-content-center'>
+            <CardDeck>
+              {products.map((product) => (
+                <Col key={product._id} sm={6} md={6} lg={4} xl={3}>
+                  <Product product={product} />
+                </Col>
+              ))}
+            </CardDeck>
           </Row>
-          <Paginate
-            pages={pages}
-            page={page}
-            keyword={keyword ? keyword : ''}
-          />
+          <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} />
         </>
       )}
+
+
 {!keyword && categories && categories.map((i,index)=>(
   <>
   <h1>{i.name}(S)
