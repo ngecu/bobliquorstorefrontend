@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux'
 import CategoryProductsScreen from './screens/CategoryProductsScreen'
 import WishlistScreen from './screens/WishlistScreen'
 import BasketScreen from './screens/BasketScreen'
+import OrdersScreen from './screens/OrdersScreen'
 
 const App = () => {
   const categoryList = useSelector((state) => state.categoryList)
@@ -32,6 +33,9 @@ const App = () => {
       <Header  categories={categories}/>
       <main>
       <Route path='/category/:id' component={CategoryProductsScreen} />
+      {/* <Route path='/my-account/orders' component={OrdersScreen} /> */}
+      
+      
           <Route path='/order/:id' component={OrderScreen} />
           <Route path='/shipping' component={ShippingScreen} />
           <Route path='/payment' component={PaymentScreen} />

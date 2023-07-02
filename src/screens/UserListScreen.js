@@ -22,7 +22,7 @@ const UserListScreen = ({ history }) => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listUsers())
     } else {
-      history.push('/login')
+      history.push('/my-account')
     }
   }, [dispatch, history, successDelete, userInfo])
 

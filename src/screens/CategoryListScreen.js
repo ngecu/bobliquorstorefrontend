@@ -39,7 +39,7 @@ const CategoryListScreen = ({ history, match }) => {
     dispatch({ type: CATEGORY_CREATE_RESET })
 
     if (!userInfo || !userInfo.isAdmin) {
-      history.push('/login')
+      history.push('/my-account/')
     }
 
     if (successCreate) {

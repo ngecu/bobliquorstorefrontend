@@ -23,7 +23,9 @@ const Header = ({categories}) => {
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
           <LinkContainer to='/'>
-            <Navbar.Brand>Drink&Chill</Navbar.Brand>
+            <Navbar.Brand>
+              {/* <img src="https://www.oaks.delivery/wp-content/uploads/onc-logo-svg-header.svg"/> */}
+            Drink&Chill</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
@@ -39,16 +41,24 @@ const Header = ({categories}) => {
                   </Nav.Link>
               </LinkContainer>
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id='username'>
-                  <LinkContainer to='/profile'>
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                    <LinkContainer to='/my-account/'>
+                    <Nav.Link>
+                    <div className="icon-text-wrapper">
+                      <i className='fas fa-user'></i> 
+                      <span>Account</span>
+                    </div>
+                    </Nav.Link>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                // <NavDropdown title={userInfo.name} id='username'>
+                //   <LinkContainer to='/profile'>
+                //     <NavDropdown.Item>Profile</NavDropdown.Item>
+                //   </LinkContainer>
+                //   <NavDropdown.Item onClick={logoutHandler}>
+                //     Logout
+                //   </NavDropdown.Item>
+                // </NavDropdown>
               ) : (
-                <LinkContainer to='/my-account'>
+                <LinkContainer to='/my-account/'>
                   <Nav.Link>
                   <div className="icon-text-wrapper">
                     <i className='fas fa-user'></i> 
@@ -58,7 +68,19 @@ const Header = ({categories}) => {
                 </LinkContainer>
               )}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin' id='adminmenu'>
+                  //   <LinkContainer to='/my-account'>
+                  //   <Nav.Link>
+                  //   <div className="icon-text-wrapper">
+                  //     <i className='fas fa-user'></i> 
+                  //     <span>Account</span>
+                  //   </div>
+                  //   </Nav.Link>
+                  // </LinkContainer>
+
+                <NavDropdown title={ <div className="icon-text-wrapper">
+                <i className='fas fa-user'></i> 
+                <span>Admin</span>
+              </div>} id='adminmenu'>
                   <LinkContainer to='/admin/userlist'>
                     <NavDropdown.Item>Users</NavDropdown.Item>
                   </LinkContainer>

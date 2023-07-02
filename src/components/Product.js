@@ -15,6 +15,9 @@ const Product = ({ product }) => {
   const dispatch = useDispatch()
 
 
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
 
@@ -40,7 +43,7 @@ const Product = ({ product }) => {
   const handleWishlistAdd = (product)=>{
     console.log("prodcut addeing to wishlist")
     const productId = product._id
-    dispatch(addToWish(productId, 1))
+    dispatch(addToWish(productId, userInfo._id))
   }
 
   const showDrawer = (product) => {

@@ -6,11 +6,12 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { login } from '../actions/userActions'
 import { Checkbox, Form, Input } from 'antd'
+import ProfileScreen from './ProfileScreen'
 
 const LoginScreen = ({ location, history }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
+  const [message,] = useState(null);
   const dispatch = useDispatch()
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -19,15 +20,16 @@ const LoginScreen = ({ location, history }) => {
   const redirect = location.search ? location.search.split('=')[1] : '/'
 
   useEffect(() => {
-    if (userInfo) {
-      history.push(redirect)
-    }
+    // if (userInfo) {
+    //   history.push(redirect)
+    // }
   }, [history, userInfo, redirect])
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(login(email, password))
-  }
+  const submitLoginHandler = (values) => {
+    console.log("submitted");
+    const { username, password } = values;
+    dispatch(login(username, password));
+  };
   const onFinish = (values) => {
     console.log('Success:', values);
   };
@@ -37,43 +39,44 @@ const LoginScreen = ({ location, history }) => {
 
   return (
     <Container>
-      <h1>My Account</h1>
+      {!userInfo ? <>
+        <h1>My Account</h1>
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
 
       <Row>
         <Col md={6}>
+        {message && <Message variant='danger'>{message}</Message>}
           <h3>Login</h3>
           <Form
-           layout={"vertical"}
-    name="basic"
-    labelCol={{
-      span: 8,
-    }}
-    wrapperCol={{
-      span: 16,
-    }}
-    // style={{
-    //   maxWidth: 600,
-    // }}
-    initialValues={{
-      remember: true,
-    }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
-    autoComplete="off"
+            initialValues={{ remember: true }}
+            onFinish={submitLoginHandler}
+            layout="vertical"
+            name="basic"
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+          
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
   >
     <Form.Item
-      label="Username"
+      label="Username or email address"
       name="username"
       rules={[
         {
           required: true,
-          message: 'Please input your username!',
+          message: 'Please input your username or email!',
         },
       ]}
     >
-      <Input />
+      <Input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
     </Form.Item>
 
     <Form.Item
@@ -86,7 +89,10 @@ const LoginScreen = ({ location, history }) => {
         },
       ]}
     >
-      <Input.Password />
+      <Input.Password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+      />
     </Form.Item>
 
     <Form.Item
@@ -106,7 +112,7 @@ const LoginScreen = ({ location, history }) => {
         span: 16,
       }}
     >
-      <Button type="submit" variant='success' htmlType="submit">
+      <Button variant='success' type="submit" htmlType="submit">
         Login
       </Button>
     </Form.Item>
@@ -118,7 +124,7 @@ const LoginScreen = ({ location, history }) => {
 
         <Col md={6}>
           <h3>Register</h3>
-          <Form
+          {/* <Form
            layout={"vertical"}
     name="basic"
     labelCol={{
@@ -184,10 +190,12 @@ const LoginScreen = ({ location, history }) => {
         Register
       </Button>
     </Form.Item>
-  </Form>
+  </Form> */}
 
         </Col>
       </Row>
+      </> : (<ProfileScreen/>)}
+    
       
     </Container>
   )
