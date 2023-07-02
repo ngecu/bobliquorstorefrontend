@@ -95,10 +95,10 @@ const ProductListScreen = ({ history, match }) => {
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>ID</th>
+               <th></th>
                 <th>NAME</th>
                 <th>PRICE</th>
-                <th>CATEGORY</th>
+               
                 <th>BRAND</th>
                 <th></th>
               </tr>
@@ -106,10 +106,9 @@ const ProductListScreen = ({ history, match }) => {
             <tbody>
               {products.map((product) => (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
+                  <td><img src={product.image} width={40} /></td>
                   <td>{product.name}</td>
                   <td>Ksh.{product.price}</td>
-                  <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product._id}/edit`}>

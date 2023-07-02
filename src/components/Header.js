@@ -67,7 +67,7 @@ const Header = ({categories}) => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-              {userInfo && userInfo.isAdmin && (
+              {/* {userInfo && userInfo.isAdmin && (
                   //   <LinkContainer to='/my-account'>
                   //   <Nav.Link>
                   //   <div className="icon-text-wrapper">
@@ -94,7 +94,7 @@ const Header = ({categories}) => {
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
-              )}
+              )} */}
                  <LinkContainer to='/basket'>
                 <Nav.Link>
 

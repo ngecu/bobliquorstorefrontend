@@ -9,14 +9,19 @@ import { listMyOrders } from '../actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 import { Link,useLocation } from 'react-router-dom'
 import { addToCart } from '../actions/cartActions'
-
+import UserListScreen from './UserListScreen'
+import ProductListScreen from './ProductListScreen'
+import { useRouteMatch } from 'react-router-dom';
+import CategoryListScreen from './CategoryListScreen'
+import OrderListScreen from './OrderListScreen'
+import UserEditScreen from './UserEditScreen'
 const ProfileScreen = ({ history }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
-
+  const match = useRouteMatch();
 
   const location = useLocation();
   const { pathname } = location;
@@ -90,6 +95,7 @@ const ProfileScreen = ({ history }) => {
         ) : error ? (
           <Message variant='danger'>{error}</Message>
         ) : (
+          <>
           <ListGroup>
           <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--dashboard is-active">
             <Link to="/my-account/">Dashboard</Link>
@@ -113,52 +119,24 @@ const ProfileScreen = ({ history }) => {
             <Link onClick={logoutHandler}>Log out</Link>
           </ListGroup.Item>
         </ListGroup>
-
-          // <Form onSubmit={submitHandler}>
-          //   <Form.Group controlId='name'>
-          //     <Form.Label>Name</Form.Label>
-          //     <Form.Control
-          //       type='name'
-          //       placeholder='Enter name'
-          //       value={name}
-          //       onChange={(e) => setName(e.target.value)}
-          //     ></Form.Control>
-          //   </Form.Group>
-
-          //   <Form.Group controlId='email'>
-          //     <Form.Label>Email Address</Form.Label>
-          //     <Form.Control
-          //       type='email'
-          //       placeholder='Enter email'
-          //       value={email}
-          //       onChange={(e) => setEmail(e.target.value)}
-          //     ></Form.Control>
-          //   </Form.Group>
-
-          //   <Form.Group controlId='password'>
-          //     <Form.Label>Password</Form.Label>
-          //     <Form.Control
-          //       type='password'
-          //       placeholder='Enter password'
-          //       value={password}
-          //       onChange={(e) => setPassword(e.target.value)}
-          //     ></Form.Control>
-          //   </Form.Group>
-
-          //   <Form.Group controlId='confirmPassword'>
-          //     <Form.Label>Confirm Password</Form.Label>
-          //     <Form.Control
-          //       type='password'
-          //       placeholder='Confirm password'
-          //       value={confirmPassword}
-          //       onChange={(e) => setConfirmPassword(e.target.value)}
-          //     ></Form.Control>
-          //   </Form.Group>
-
-          //   <Button type='submit' variant='primary'>
-          //     Update
-          //   </Button>
-          // </Form>
+          {userInfo.isAdmin && <>
+          <h2>Admin Panel</h2>
+          <ListGroup>
+          <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--dashboard is-active">
+            <Link to="/my-account/users/">Users</Link>
+          </ListGroup.Item>
+          <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders">
+            <Link to="/my-account/products/">Products</Link>
+          </ListGroup.Item>
+          <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--purchased-products">
+            <Link to="/my-account/categories/">Categories</Link>
+          </ListGroup.Item>
+          <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--edit-account">
+            <Link to="/my-account/orders/">Orders</Link>
+          </ListGroup.Item>
+        </ListGroup>
+          </>}
+        </>
         )}
       </Col>
       <Col md={9}>
@@ -458,6 +436,34 @@ From your account dashboard you can view your <Link to="/orders">recent orders</
 </>
 
 )}
+
+
+{/* ADMIN RENDERS  */}
+
+{pathname === '/my-account/users/' && (
+       <UserListScreen/>
+      )}
+
+
+{pathname === '/my-account/products/' && (
+       <ProductListScreen match={match}/>
+      )}
+
+
+{pathname === '/my-account/categories/' && (
+       <CategoryListScreen match={match}/>
+      )}
+
+{pathname === '/my-account/orders/' && (
+       <OrderListScreen match={match}/>
+      )}
+
+
+{pathname === `/my-account/users/:id/edit` && (
+       <UserEditScreen match={match}/>
+      )}
+
+
 
       </Col>
     </Row>

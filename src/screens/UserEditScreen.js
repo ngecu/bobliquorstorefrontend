@@ -7,9 +7,12 @@ import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { getUserDetails, updateUser } from '../actions/userActions'
 import { USER_UPDATE_RESET } from '../constants/userConstants'
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
 
 const UserEditScreen = ({ match, history }) => {
-  const userId = match.params.id
+  const { id } = useParams();
+  console.log(id)
+  const userId = id
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
