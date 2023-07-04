@@ -12,10 +12,8 @@ const Header = ({categories}) => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  const logoutHandler = () => {
-    dispatch(logout())
-  }
-  const cartItemsCount = 5; // Replace this with the actual count of cart items
+  const cart = useSelector((state) => state.cart)
+  const { cartItems } = cart
 
   return (
     <>
@@ -32,7 +30,7 @@ const Header = ({categories}) => {
             <Route render={({ history }) =>   <SearchBox history={history} />} />
             <Nav className='ml-auto'>
            
-              <LinkContainer to='/wishlist'>
+              <LinkContainer to='/my-account/cgkit-wishlist/'>
                   <Nav.Link>
                   <div className="icon-text-wrapper">
         <i className="fas fa-heart"></i>
@@ -95,16 +93,17 @@ const Header = ({categories}) => {
                   </LinkContainer>
                 </NavDropdown>
               )} */}
-                 <LinkContainer to='/basket'>
-                <Nav.Link>
-
-                  <div className="icon-text-wrapper">
-                    <i className='fas fa-shopping-cart'></i>
-                    <span>basket</span>
-                  </div>
-
-                </Nav.Link>
-              </LinkContainer>
+<LinkContainer to='/basket'>
+        <Nav.Link>
+          <div className="basket-icon-wrapper icon-text-wrapper" data-count={cartItems.length}>
+            <i className='fas fa-shopping-cart'></i>
+            <span>basket</span>
+          </div>
+          {cartItems.length > 0 && (
+            <div className="cart-items">{cartItems.length}</div>
+          )}
+        </Nav.Link>
+      </LinkContainer>
 
               <LinkContainer to='/checkout'>
                 <Nav.Link>

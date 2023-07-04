@@ -29,9 +29,9 @@ const LoginScreen = ({ location, history }) => {
   }, [history, userInfo, redirect])
 
   const submitLoginHandler = (values) => {
-    console.log("submitted");
-    const { username, password } = values;
-    dispatch(login(username, password));
+    console.log("submitted ",values);
+    const { email, password } = values;
+    dispatch(login(email, password));
   };
 
   const submitRegisterHandler = (values) => {
@@ -78,7 +78,7 @@ const LoginScreen = ({ location, history }) => {
   >
     <Form.Item
       label="Email address"
-      name="Email"
+      name="email"
       rules={[
         {
           required: true,

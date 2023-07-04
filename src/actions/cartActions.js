@@ -5,33 +5,57 @@ import {
   CART_SAVE_SHIPPING_ADDRESS,
   CART_SAVE_PAYMENT_METHOD,
 } from '../constants/cartConstants'
-
+import {  message } from 'antd';
 export const addToCart = (id, qty) => async (dispatch, getState) => {
-  const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/products/${id}`)
+  const key = 'updatable';
+  message.loading({ content: 'Loading...', key });
 
-  dispatch({
-    type: CART_ADD_ITEM,
-    payload: {
-      product: data._id,
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      countInStock: data.countInStock,
-      qty,
-    },
-  })
+  try{
+    const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/products/${id}`)
 
-  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+    dispatch({
+      type: CART_ADD_ITEM,
+      payload: {
+        product: data._id,
+        name: data.name,
+        image: data.image,
+        price: data.price,
+        countInStock: data.countInStock,
+        qty,
+      },
+    })
+    message.success({ content: 'Item added to cart!', key, duration: 2 });
+    localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+  }
+  catch(error){
+    message.error({ content: 'Error adding item to cart!', key, duration: 2 });
+  }
+  
 }
 
 export const removeFromCart = (id) => (dispatch, getState) => {
-  dispatch({
-    type: CART_REMOVE_ITEM,
-    payload: id,
-  })
+  const key = 'updatable';
+  try {
+    
+    // Display success message
+    message.loading({ content: 'Removing item from cart...', key });
 
-  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
-}
+    dispatch({
+      type: CART_REMOVE_ITEM,
+      payload: id,
+    });
+
+    // Update local storage
+    localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
+
+    // Display success message
+    message.success({ content: 'Item removed from cart!', key, duration: 2 });
+  } catch (error) {
+    // Display error message
+    message.error({ content: 'Error removing item from cart!', key, duration: 2 });
+  }
+};
+
 
 export const saveShippingAddress = (data) => (dispatch) => {
   dispatch({

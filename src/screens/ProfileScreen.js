@@ -16,6 +16,8 @@ import CategoryListScreen from './CategoryListScreen'
 import OrderListScreen from './OrderListScreen'
 import UserEditScreen from './UserEditScreen'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { getUserWishes } from '../actions/wishActions'
+import WishlistScreen from './WishlistScreen'
 const ProfileScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -57,6 +59,11 @@ const ProfileScreen = () => {
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
         dispatch(getUserDetails('profile'))
         dispatch(listMyOrders())
+
+        if(pathname =="/my-account/cgkit-wishlist/"){
+          console.log("you are in wishlist")
+          dispatch(getUserWishes(userInfo._id))
+        }
       } else {
         setName(user.name)
         setEmail(user.email)
@@ -383,44 +390,7 @@ From your account dashboard you can view your <Link to="/orders">recent orders</
       )}
 
 {pathname === '/my-account/cgkit-wishlist/' && (
-      <>
-      {wishItems.length === 0 ? (
-        <Message>
-          Your Wishlist is empty 
-        </Message>
-      ) : (
-        
-          <Table responsive className='table-sm'>
-            <thead>
-                <tr>
-                   <th>Product</th>
-                   <th>Price</th>
-                   <th>Stock Status</th> 
-                </tr>
-            </thead>
-            <tbody>
-              {wishItems.map((item) => (
-                <tr key={item.product}>
-                  <td>
-                  <img src={item.image} width={100} />
-                  {item.name}
-                  </td>
-                 <td>
-                    {item.price}
-                 </td>
-                 <td>
-                    <b className='text-success'>In stock</b>
-                 </td>
-                 <td>
-                    <Button type="button" variant="success" onClick={(e)=>addToCartHandler(item)}>Add To Cart</Button>
-                 </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-  )
-}
-</>
+<WishlistScreen history={history} match={match}/>
 
 )}
 

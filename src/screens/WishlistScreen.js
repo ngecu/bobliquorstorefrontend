@@ -12,7 +12,7 @@ import {
 } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 import { addToCart } from '../actions/cartActions'
-import { getUserWishes } from '../actions/wishActions'
+import { getUserWishes, removeFromWish } from '../actions/wishActions'
 
 const WishlistScreen = ({ history, match }) => {
   const pageNumber = match.params.pageNumber || 1
@@ -28,11 +28,11 @@ const WishlistScreen = ({ history, match }) => {
   useEffect(() => {
     // dispatch({ type: PRODUCT_CREATE_RESET })
 
-    if (!userInfo || !userInfo.isAdmin) {
-      history.push('/my-account')
+    if (!userInfo) {
+      history.push('/my-account/?error=please_login')
     }
     else{
-      dispatch(getUserWishes(userInfo._ud, pageNumber))
+      dispatch(getUserWishes(userInfo._id, pageNumber))
 
     }
 
@@ -47,7 +47,12 @@ const WishlistScreen = ({ history, match }) => {
     pageNumber,
   ])
 
-
+  const deleteHandler = (id) => {
+    console.log(id)
+    if (window.confirm('Are you sure')) {
+      dispatch(removeFromWish(id,userInfo._id))
+    }
+  }
 
 
   return (
@@ -63,7 +68,7 @@ const WishlistScreen = ({ history, match }) => {
         </Col> */}
       </Row>
       <>
-      {wishItems.length === 0 ? (
+      {wishItems?.length === 0 ? (
         <Message>
           Your Wishlist is empty 
         </Message>
@@ -78,9 +83,16 @@ const WishlistScreen = ({ history, match }) => {
                 </tr>
             </thead>
             <tbody>
-              {wishItems.map((item) => (
+              {wishItems && wishItems.map((item) => (
                 <tr key={item.product}>
                   <td>
+                  <Button
+                    variant='danger'
+                    className='btn-sm'
+                    onClick={() => deleteHandler(item._id)}
+                  >
+                    <i className='fas fa-trash'></i>
+                  </Button>
                   <img src={item.image} width={100} />
                   {item.name}
                   </td>
@@ -91,7 +103,12 @@ const WishlistScreen = ({ history, match }) => {
                     <b className='text-success'>In stock</b>
                  </td>
                  <td>
-                    {/* <Button type="button" variant="success" onClick={(e)=>addToCartHandler(item)}>Add To Cart</Button> */}
+                    <Button 
+                    type="button" 
+                    variant="success"
+                     onClick={(e)=>dispatch(addToCart(item._id, 1))} >
+                      Add To Cart
+                     </Button>
                  </td>
                 </tr>
               ))}

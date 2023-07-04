@@ -1,113 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Steps, Input, Button } from 'antd';
+import React, { useState, useEffect } from 'react'
+import { Form, Steps,Input,Button } from 'antd';
 import { Card, Col, Container, Image, ListGroup, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../actions/cartActions';
-import {
-  toLatLon,
-  toLatitudeLongitude,
-  headingDistanceTo,
-  moveTo,
-  insidePolygon,
-} from 'geolocation-utils';
+import { 
+  toLatLon, toLatitudeLongitude, headingDistanceTo, moveTo, insidePolygon 
+} from 'geolocation-utils'
 import GoogleMapReact from 'google-map-react';
-import Message from '../components/Message';
-
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const CheckoutScreen = ({ location, history }) => {
+
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [error, setError] = useState(null);
-  const [isInsidePolygon, setIsInsidePolygon] = useState(false); // Track whether the current location is inside the polygon
 
-  const dispatch = useDispatch();
+      const dispatch = useDispatch()
 
-  const cart = useSelector((state) => state.cart);
-  const { cartItems, shippingAddress } = cart;
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
+      const cart = useSelector((state) => state.cart)
+      const { cartItems,shippingAddress } = cart
 
-          // Check if the current location is inside the polygon
-          const isInside = insidePolygon(
-            [position.coords.latitude, position.coords.longitude],
-            polygon
-          );
-          setIsInsidePolygon(isInside);
+      useEffect(() => {
+        const getLocation = () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                setLatitude(position.coords.latitude);
+                setLongitude(position.coords.longitude);
+              },
+              (error) => {
+                setError(error.message);
+              }
+            );
+          } else {
+            setError('Geolocation is not supported by this browser.');
+          }
+        };
+    
+        getLocation();
+      }, []);
+
+      
+      const defaultProps = {
+        center: {
+          lat: -1.2841,
+          lng: 36.8155
         },
-        (error) => {
-          setError(error.message);
-        }
-      );
-    } else {
-      setError('Geolocation is not supported by this browser.');
-    }
-  };
-  useEffect(() => {
+        zoom: 11
+      };
 
+      const polygon = [
+  [-0.699174, 37.209438],
+  [-0.754702, 37.156481],
+  [-0.723205, 37.118458],
+  [-0.691450, 37.148069]
+]
 
-    getLocation();
-  }, []);
-
-  const polygon = [
-    [-0.699174, 37.209438],
-    [-0.754702, 37.156481],
-    [-0.723205, 37.118458],
-    [-0.69145, 37.148069],
-  ];
-
-  const handleRetry = () => {
-    setLatitude(null);
-    setLongitude(null);
-    setError(null);
-    setIsInsidePolygon(false);
-    getLocation();
-  };
-
+console.log(insidePolygon([-0.725321, 37.164136], polygon)) // true
   return (
     <Container>
-      <Steps
-        className='my-2'
-        current={1}
-        items={[
-          {
-            title: 'Shipping Basket',
-          },
-          {
-            title: 'Details and Checkout',
-          },
-          {
-            title: 'Confirmation',
-          },
-        ]}
-      />
+        <Steps className='my-2'
+    current={1}
+    items={[
+      {
+        title: 'Shipping Basket'
+      },
+      {
+        title: 'Details and Checkout',
+      },
+      {
+        title: 'Confirmation',
+      },
+    ]}
+  />
 
-      {!latitude && !longitude && !error ? (
-        <p>Loading location...</p>
-      ) : error ? (
-        <div>
-          <Message variant='danger'>
-            {error}
-            <br />
-            <Button onClick={handleRetry}>Retry</Button>
-          </Message>
-        </div>
-      ) : !isInsidePolygon ? (
-        <div>
-          <Message variant='danger'>
-            Sorry. You cannot proceed since you are not in the designated location region.
-            <br />
-            <Button onClick={handleRetry}>Retry</Button>
-          </Message>
-          {latitude} , {longitude}
-        </div>
-      ) : (
-        <div>
+  <div>
     {/* <div><p>Have a coupon? Cool! <Link to="#">Redeem it here</Link></p></div>
   <div>
     <p>Your glass is almost full...</p>
@@ -342,9 +310,9 @@ const CheckoutScreen = ({ location, history }) => {
   </Row>
   
   </div>
-      )}
+      
     </Container>
-  );
-};
+  )
+}
 
-export default CheckoutScreen;
+export default CheckoutScreen
