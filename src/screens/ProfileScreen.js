@@ -15,13 +15,15 @@ import { useRouteMatch } from 'react-router-dom';
 import CategoryListScreen from './CategoryListScreen'
 import OrderListScreen from './OrderListScreen'
 import UserEditScreen from './UserEditScreen'
-const ProfileScreen = ({ history }) => {
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+const ProfileScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
   const match = useRouteMatch();
+  const history = useHistory();
 
   const location = useLocation();
   const { pathname } = location;
@@ -446,16 +448,16 @@ From your account dashboard you can view your <Link to="/orders">recent orders</
 
 
 {pathname === '/my-account/products/' && (
-       <ProductListScreen match={match}/>
+       <ProductListScreen history={history} match={match}/>
       )}
 
 
 {pathname === '/my-account/categories/' && (
-       <CategoryListScreen match={match}/>
+       <CategoryListScreen history={history} match={match}/>
       )}
 
 {pathname === '/my-account/orders/' && (
-       <OrderListScreen match={match}/>
+       <OrderListScreen  history={history} match={match}/>
       )}
 
 

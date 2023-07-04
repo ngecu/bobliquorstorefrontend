@@ -24,6 +24,9 @@ import CategoryProductsScreen from './screens/CategoryProductsScreen'
 import WishlistScreen from './screens/WishlistScreen'
 import BasketScreen from './screens/BasketScreen'
 import OrdersScreen from './screens/OrdersScreen'
+import LostPasswordScreen from './screens/LostPasswordScreen'
+import NewPasswordScreen from './screens/NewPasswordScreen'
+import CheckoutScreen from './screens/CheckoutScreen'
 
 const App = () => {
   const categoryList = useSelector((state) => state.categoryList)
@@ -42,12 +45,15 @@ const App = () => {
           <Route path='/placeorder' component={PlaceOrderScreen} />
           <Route path='/my-account' component={LoginScreen} />
           <Route path='/wishlist' component={WishlistScreen} />
+          <Route path='/checkout' component={CheckoutScreen} />
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
           <Route path='/product/:id' component={ProductScreen} />
           <Route path='/basket/:id?' component={BasketScreen} />
           <Route path='/admin/userlist' component={UserListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
+          <Route path="/lost-password" component={LostPasswordScreen} />
+          <Route path="/new-password/:id/:token" component={NewPasswordScreen} />
 
           
           <Route

@@ -185,18 +185,19 @@ const Product = ({ product }) => {
                   .reduce((acc, item) => acc + item.qty * item.price, 0)
                   .toFixed(2)}
               </ListGroup.Item>
+
               <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  disabled={cartItems.length === 0}
-                  onClick={checkoutHandler}
-                >
+                <Link to="/basket" className="btn btn-secondary btn-block w-100">View Basket</Link>
+              </ListGroup.Item>
+
+              <ListGroup.Item>
+                <Link to="/checkout" className="btn btn-success btn-block w-100">
                   Proceed To Checkout
-                </Button>
+                </Link>
               </ListGroup.Item>
             </ListGroup>
           </Card>
+          <img src="https://www.oaks.delivery/wp-content/uploads/mini-cart-payment-methods-ke.png" className='w-100' />
         </>
       )}
     </Drawer>

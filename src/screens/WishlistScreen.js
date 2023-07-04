@@ -12,73 +12,43 @@ import {
 } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 import { addToCart } from '../actions/cartActions'
+import { getUserWishes } from '../actions/wishActions'
 
 const WishlistScreen = ({ history, match }) => {
   const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch()
 
-  const productList = useSelector((state) => state.productList)
-  const { loading, error, products, page, pages } = productList
-
-  const productDelete = useSelector((state) => state.productDelete)
-  const {
-    loading: loadingDelete,
-    error: errorDelete,
-    success: successDelete,
-  } = productDelete
-
-  const productCreate = useSelector((state) => state.productCreate)
-  const {
-    loading: loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    product: createdProduct,
-  } = productCreate
+  const wish = useSelector((state) => state.wish)
+  const { loading,error,wishItems } = wish
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-
-  const wish = useSelector((state) => state.wish)
-  const { wishItems } = wish
-
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET })
+    // dispatch({ type: PRODUCT_CREATE_RESET })
 
-    // if (!userInfo || !userInfo.isAdmin) {
-    //   history.push('/my-account')
-    // }
-
-    if (successCreate) {
-      history.push(`/admin/product/${createdProduct._id}/edit`)
-    } else {
-      dispatch(listProducts('', pageNumber))
+    if (!userInfo || !userInfo.isAdmin) {
+      history.push('/my-account')
     }
+    else{
+      dispatch(getUserWishes(userInfo._ud, pageNumber))
+
+    }
+
+    
   }, [
     dispatch,
     history,
     userInfo,
-    successDelete,
-    successCreate,
-    createdProduct,
+    // successDelete,
+    // successCreate,
+    // createdProduct,
     pageNumber,
   ])
 
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure')) {
-      dispatch(deleteProduct(id))
-    }
-  }
 
-  const createProductHandler = () => {
-    dispatch(createProduct())
-  }
 
-  const addToCartHandler = (product) => {
-    const productId = product._id
-    dispatch(addToCart(productId, 1))
-  };
 
   return (
     <Container>
@@ -121,7 +91,7 @@ const WishlistScreen = ({ history, match }) => {
                     <b className='text-success'>In stock</b>
                  </td>
                  <td>
-                    <Button type="button" variant="success" onClick={(e)=>addToCartHandler(item)}>Add To Cart</Button>
+                    {/* <Button type="button" variant="success" onClick={(e)=>addToCartHandler(item)}>Add To Cart</Button> */}
                  </td>
                 </tr>
               ))}

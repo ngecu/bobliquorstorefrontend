@@ -31,7 +31,7 @@ const CategoryEditScreen = ({ match, history }) => {
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: CATEGORY_UPDATE_RESET })
-      history.push('/admin/categorylist')
+      history.push('/my-account/categories/')
     } else {
       if (!category.name || category._id !== categoryId) {
         dispatch(getCategoryDetails(categoryId))
@@ -59,7 +59,7 @@ const CategoryEditScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link to='/admin/categorylist' className='btn btn-light my-3'>
+      <Link to='/my-account/categories/' className='btn btn-light my-3'>
         Go Back
       </Link>
       <FormContainer>

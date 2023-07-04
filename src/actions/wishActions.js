@@ -1,6 +1,45 @@
 import axios from 'axios'
 
-import { WISH_ADD_ITEM, WISH_REMOVE_ITEM } from '../constants/wishContants'
+import { USER_WISHES_FAIL, USER_WISHES_REQUEST, USER_WISHES_SUCCESS, WISH_ADD_ITEM, WISH_REMOVE_ITEM } from '../constants/wishContants'
+import { logout } from './userActions'
+
+
+export const getUserWishes = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_WISHES_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/users/userWishlist/${id}`, config)
+
+    dispatch({
+      type: USER_WISHES_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: USER_WISHES_FAIL,
+      payload: message,
+    })
+  }
+}
 
 export const addToWish = (id, userId) => async (dispatch, getState) => {
   const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/products/${id}`)

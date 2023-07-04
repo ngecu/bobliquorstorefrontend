@@ -2,6 +2,9 @@ import {
     WISH_ADD_ITEM,
     WISH_REMOVE_ITEM,
     WISH_CLEAR_ITEMS,
+    USER_WISHES_REQUEST,
+    USER_WISHES_SUCCESS,
+    USER_WISHES_FAIL,
   } from '../constants/wishContants'
   
   export const wishReducer = (
@@ -38,6 +41,13 @@ import {
           ...state,
           wishItems: [],
         }
+      case USER_WISHES_REQUEST:
+        return { loading: true }
+      case USER_WISHES_SUCCESS:
+        return { loading: false, wishItems: action.payload }
+        case USER_WISHES_FAIL:
+          return { loading: false, error: action.payload }
+    
       default:
         return state
     }
