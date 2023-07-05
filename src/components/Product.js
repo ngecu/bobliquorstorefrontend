@@ -109,9 +109,13 @@ const Product = ({ product }) => {
             // text={`${product.numReviews} reviews`}
           />
         </Card.Text>
+        {product.countInStock > 0 ? (
         <Button variant="success" onClick={()=>showDrawer(product)} className="w-100">
           Add to basket
         </Button>
+        ):(  <Button disabled={true} variant="primary" className="w-100">
+        Out of Stock
+      </Button>)}
       </Card.Body>
     </Card>
     <Drawer
