@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Steps, Input, Button } from 'antd';
-import { Card, Col, Container, Image, ListGroup, Row } from 'react-bootstrap';
+import { Form, Steps, Input, Button, message } from 'antd';
+import {  Card, Col, Container, Image, ListGroup, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart } from '../actions/cartActions';
+import { addToCart, removeFromCart, saveShippingAddress } from '../actions/cartActions';
 import {
   toLatLon,
   toLatitudeLongitude,
@@ -13,8 +13,10 @@ import {
 } from 'geolocation-utils';
 import GoogleMapReact from 'google-map-react';
 import Message from '../components/Message';
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+import { createOrder } from '../actions/orderActions';
+import { Collapse } from 'react-bootstrap';
+import { USER_DETAILS_RESET } from '../constants/userConstants';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 
 const CheckoutScreen = ({ location, history }) => {
   const [latitude, setLatitude] = useState(null);
@@ -24,8 +26,52 @@ const CheckoutScreen = ({ location, history }) => {
 
   const dispatch = useDispatch();
 
+
+  // Function to calculate the distance between two points using latitude and longitude
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3; // Radius of the earth in meters
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in meters
+  return distance;
+}
+
+// Helper function to convert degrees to radians
+function deg2rad(deg) {
+  return deg * (Math.PI / 180);
+}
+
+// Calculate shipping price based on the distance
+function calculateShippingPrice(distance) {
+  const pricePerKm = 150; // Price per kilometer in shillings
+  const distanceInKm = distance / 1000; // Convert distance from meters to kilometers
+  const shippingPrice = Math.ceil(distanceInKm) * pricePerKm; // Round up to the nearest kilometer and calculate price
+  return shippingPrice;
+}
+
+// Example usage
+
+
+// -1.2855993812287634, 36.814808422747824
+const distanceInMeters = calculateDistance( -0.7200037360096324,37.15843007128105,latitude, longitude);
+const distanceInKilometers = distanceInMeters / 1000;
+const shippingPricePerKm = 150;
+const shippingPrice = Math.ceil(distanceInKilometers / 60) * shippingPricePerKm;
+
+console.log('Distance:', distanceInKilometers.toFixed(2), 'km');
+console.log('Shipping Price:', shippingPrice, 'KES');
+
   const cart = useSelector((state) => state.cart);
   const { cartItems, shippingAddress } = cart;
+  
+  
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -39,6 +85,8 @@ const CheckoutScreen = ({ location, history }) => {
             polygon
           );
           setIsInsidePolygon(isInside);
+          setAddress(`${position.coords.latitude}, ${position.coords.longitude}`);
+
         },
         (error) => {
           setError(error.message);
@@ -69,6 +117,199 @@ const CheckoutScreen = ({ location, history }) => {
     getLocation();
   };
 
+  
+
+
+  const [address, setAddress] = useState(shippingAddress.address)
+  const [email, setEmail] = useState(shippingAddress.email)
+  const [firstName, setfirstName] = useState(shippingAddress.firstName)
+  const [lastName, setlastName] = useState(shippingAddress.secondName)
+  const [phone, setPhone] = useState(shippingAddress.phone)
+  const [additionalNotes, setAdditionalNotes] = useState(shippingAddress.additionalNotes)
+
+  const generateRandomString = (length) => {
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomString += characters.charAt(randomIndex);
+    }
+    return randomString;
+  };
+
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+  
+    if (!firstName || !lastName || !email || !phone) {
+      // Display an error message or perform any other necessary action
+      console.log('Please fill in all required fields');
+      message.error('Please fill in all required fields');
+      return;
+    }
+  
+    console.log('submitted');
+    const randomString = generateRandomString(10); // Generate a random string of length 10
+    dispatch(saveShippingAddress({ address, firstName, lastName, phone, additionalNotes }));
+  
+    // Check the selected payment method and perform the appropriate action
+    if (openId === 1) {
+      // Mpesa Express selected
+      history.push(`/m-pesa-express-checkout/?id=${randomString}`);
+    } else if (openId === 4) {
+      // Mpesa Classic (Buy Goods) selected
+      placeOrderHandler("buy-goods");
+    }
+    else{
+      placeOrderHandler("cash-on-delivery");
+    }
+  };
+  
+  
+
+    const [openId, setOpenId] = useState(null);
+
+  const handleHeaderClick = (id) => {
+    if (id === openId) {
+      setOpenId(null);
+    } else {
+      setOpenId(id);
+    }
+  };
+
+
+
+  const options = [
+    {
+      label: (
+        <div className="row payment-option" onClick={() => handleHeaderClick(1)}>
+          <div className="col-md-6">
+            <input type="radio" checked={openId === 1} readOnly />
+            Mpesa Express
+          </div>
+          <div className="col-md-6">
+            <img src="https://www.oaks.delivery/wp-content/plugins/woocommerce-kenpesa-gateway/assets/images/lipa-na-mpesa.png" alt="Mpesa Express" />
+          </div>
+        </div>
+      ),
+      image: 'mpesa-express-image-url',
+      text: 'Send an M-Pesa payment request to your phone number.',
+      value: 'mpesa-express',
+    },
+    // {
+    //   label: (
+    //     <div className="row payment-option" onClick={() => handleHeaderClick(2)}>
+    //       <div className="col-md-6">
+    //         <input type="radio" checked={openId === 2} readOnly />
+    //         3D Secure Visa/Mastercard
+    //       </div>
+    //       <div className="col-md-6">
+    //         <img src="https://www.oaks.delivery/wp-content/plugins/woocommerce/assets/images/icons/credit-cards/visa.svg" alt="Visa" />
+    //         <img src="https://www.oaks.delivery/wp-content/plugins/woocommerce/assets/images/icons/credit-cards/mastercard.svg" alt="Mastercard" />
+    //       </div>
+    //     </div>
+    //   ),
+    //   image: 'visa-mastercard-image-url',
+    //   text: 'Pay online via your VISA or Mastercard (3D Secure). An OTP code will be sent by your bank to your phone number and/or email to confirm the transaction. 3D Secure needs to be active for your card – your bank can activate this security feature.',
+    //   value: 'visa-mastercard',
+    // },
+    // {
+    //   label: (
+    //     <div className="row payment-option" onClick={() => handleHeaderClick(3)}>
+    //       <div className="col-md-6">
+    //         <input type="radio" checked={openId === 3} readOnly />
+    //         Swipe on Delivery
+    //       </div>
+    //       <div className="col-md-6">
+    //         <img src="https://www.oaks.delivery/wp-content/plugins/cards/images/pdq.jpg" alt="Swipe on Delivery" />
+    //       </div>
+    //     </div>
+    //   ),
+    //   image: 'swipe-on-delivery-image-url',
+    //   text: 'Swipe your card on delivery. Pay with Visa or Mastercard.',
+    //   value: 'swipe-on-delivery',
+    // },
+    {
+      label: (
+        <div className="row payment-option" onClick={() => handleHeaderClick(4)}>
+          <div className="col-md-6">
+            <input type="radio" checked={openId === 4} readOnly />
+            Mpesa Classic (Buy Goods)
+          </div>
+          <div className="col-md-6">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0I4r6EvGlRkqDC2z6iDJoxVC5B7UYpP7pYjw1bfF3_YJMCjRHkJ7ZSV8QdlJoBn6sxILQPomCqbA1WMmB04l9cQkoJQMO8OIz0yOwQTMspMhtMl6YCBKLkuxrg-yY1dEIXDTHRm3v1PK2oaxsfgpukGYZGxjGzay-OfJVA9noFJEIiIwBcd5rT5J_/s728/1649413686874.jpg" alt="Mpesa Classic (Buy Goods)" />
+          </div>
+        </div>
+      ),
+      image: 'mpesa-classic-image-url',
+      text: (
+        <div className="row payment-option">
+          <div className="col-md-12">Use the following till number (Buy Goods and Services) to pay on or before delivery</div>
+          <div className="col-md-12">
+            <b>Till Number 622 841</b>
+          </div>
+        </div>
+      ),
+      value: 'mpesa-classic',
+    },
+    {
+      label: (
+        <div className="row payment-option" onClick={() => handleHeaderClick(5)}>
+          <div className="col-md-12">
+            <input type="radio" checked={openId === 5} readOnly />
+            Cash on Delivery
+          </div>
+        </div>
+      ),
+      image: 'cash-on-delivery-image-url',
+      value: 'cash-on-delivery',
+      text: 'Need change? Please indicate under Order Notes if our rider should come with change. We can also send you your change by M-Pesa or add it to your wallet to use in the future.',
+    },
+  ];
+
+  const addDecimals = (num) => {
+    return (Math.round(num * 100) / 100).toFixed(2)
+  }
+
+  cart.itemsPrice = addDecimals(
+    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+  )
+  cart.shippingPrice = shippingPrice
+  cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)))
+  cart.totalPrice = (
+    Number(cart.itemsPrice) +
+    Number(cart.shippingPrice) +
+    Number(cart.taxPrice)
+  ).toFixed(2)
+
+  const orderCreate = useSelector((state) => state.orderCreate)
+  const { order, success } = orderCreate
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`)
+      dispatch({ type: USER_DETAILS_RESET })
+      dispatch({ type: ORDER_CREATE_RESET })
+    }
+    // eslint-disable-next-line
+  }, [history, success])
+
+  const placeOrderHandler = (payment) => {
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: payment,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    )
+  }
+
+  
   return (
     <Container>
       <Steps
@@ -97,14 +338,14 @@ const CheckoutScreen = ({ location, history }) => {
             <Button onClick={handleRetry}>Retry</Button>
           </Message>
         </div>
-      ) : !isInsidePolygon ? (
+      ) : isInsidePolygon ? (
         <div>
           <Message variant='danger'>
             Sorry. You cannot proceed since you are not in the designated location region.
             <br />
             <Button onClick={handleRetry}>Retry</Button>
           </Message>
-          {latitude} , {longitude}
+          
         </div>
       ) : (
         <div>
@@ -113,12 +354,14 @@ const CheckoutScreen = ({ location, history }) => {
     <p>Your glass is almost full...</p>
     <p>Fill your details here <i className="fas fa-arrow-down"></i></p>
   </div> */}
-  <Row>
-    <Col md={6}>
-    <Form 
-    // onFinish={onFinish}
+   <Form 
+    // onFinish={submitHandler}
     layout="vertical"
     >
+  <Row>
+ 
+    <Col md={6}>
+ 
       <div>
         <Row>
             <Col md={6}>
@@ -127,7 +370,7 @@ const CheckoutScreen = ({ location, history }) => {
           name="firstName"
           rules={[{ required: true, message: 'Please enter your first name' }]}
         >
-          <Input />
+          <Input value={firstName} onChange={(e) => setfirstName(e.target.value)} />
         </Form.Item>
             </Col>
             <Col md={6}>
@@ -136,7 +379,7 @@ const CheckoutScreen = ({ location, history }) => {
           name="lastName"
           rules={[{ required: true, message: 'Please enter your last name' }]}
         >
-          <Input />
+          <Input value={lastName} onChange={(e) => setlastName(e.target.value)} />
         </Form.Item>
             </Col>
         </Row>
@@ -152,7 +395,7 @@ const CheckoutScreen = ({ location, history }) => {
           { type: 'number', message: 'Please enter a valid phone number' },
         ]}
       >
-        <Input />
+        <Input  value={phone} onChange={(e) => setPhone(e.target.value)} />
       </Form.Item>
 
 
@@ -164,48 +407,12 @@ const CheckoutScreen = ({ location, history }) => {
           { type: 'email', message: 'Please enter a valid email address' },
         ]}
       >
-        <Input />
+        <Input value={email} onChange={(e) => setEmail(e.target.value)} />
       </Form.Item>
 
-      {/* <Form.Item
-        label="Delivery Address"
-        name="delivery_address"
-        rules={[
-          { required: true, message: 'Please enter your Delivery Address' },
-          { type: 'text', message: 'Please enter a valid Delivery Address' },
-        ]}
-      >
-        <Input />
-      </Form.Item> */}
-
-<div>
-      {latitude && longitude ? (
-        <p>
-          Latitude: {latitude}, Longitude: {longitude}
-        </p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : (
-        <p>Loading location...</p>
-      )}
-    </div>
-
-    {/* <div style={{height:"100px",width: '100%' }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: "" }}
-        defaultCenter={defaultProps.center}
-        defaultZoom={defaultProps.zoom}
-      >
-        <AnyReactComponent
-          lat={latitude}
-          lng={longitude}
-          text="My Location"
-        />
-      </GoogleMapReact>
-    </div> */}
     
 
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31916.009556217203!2d37.1352006026841!3d-0.7224033406879049!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1828a28207db7113%3A0xbc8b3625ac089be8!2sMurang&#39;a!5e0!3m2!1sen!2ske!4v1688477953494!5m2!1sen!2ske" width="450" height="450" style={{"border":0, allowfullscreen:"", loading:"lazy", referrerpolicy:"no-referrer-when-downgrade"}}></iframe>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31916.009556217203!2d37.1352006026841!3d-0.7224033406879049!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1828a28207db7113%3A0xbc8b3625ac089be8!2sMurang&#39;a!5e0!3m2!1sen!2ske!4v1688477953494!5m2!1sen!2ske"  height="450" style={{width:"100%",border:"0", allowfullscreen:"", loading:"lazy", referrerpolicy:"no-referrer-when-downgrade"}}></iframe>
       <Form.Item
         label="Additional Notes"
         name="additional_notes"
@@ -214,13 +421,8 @@ const CheckoutScreen = ({ location, history }) => {
           { type: 'text', message: 'Please enter a valid Delivery Address' },
         ]}
       >
-        <Input />
-      </Form.Item>
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit">Submit</Button>
-      </Form.Item>
-    </Form>
+        <Input  value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} />
+      </Form.Item> 
 
 
     </Col>
@@ -279,23 +481,15 @@ const CheckoutScreen = ({ location, history }) => {
 
               <ListGroup.Item>
 
-                {shippingAddress.length > 0 ? (<Row>
+                <Row>
                     <Col md={6}>
                         Delivery
 
                     </Col>
                     <Col md={6}>
-                        Ksh 249
+                        Ksh {cart.shippingPrice}
                     </Col>
-                </Row>): (<Row>
-                    <Col md={6}>
-                        Delivery
-
-                    </Col>
-                    <Col md={6}>
-                    There are no shipping options available. Please ensure that your address has been entered correctly, or contact us if you need any help.
-                    </Col>
-                </Row>)}
+                </Row>
                 
 
               </ListGroup.Item>
@@ -306,10 +500,10 @@ const CheckoutScreen = ({ location, history }) => {
                     <b>Total</b>
                 </Col>
                 <Col md={6}>
-                    <b>Ksh 14,394</b>
+                    <b>Ksh {cart.totalPrice}</b>
                     <br/>
                     <small>
-                    (includes KSh 1,951 VAT)
+                    (includes KSh {cart.taxPrice} VAT)
                      </small>
                 </Col>
                 </Row>
@@ -317,30 +511,39 @@ const CheckoutScreen = ({ location, history }) => {
             </ListGroup>
           </Card>
 
-          <Card className='mt-2'>
-          <Card.Body>
-        <Card.Title>
-        <Row>
-              <Col md={8}>
-                  MPESA EXPRESS
-              </Col>
-              <Col md={4}>
-                  <img className='w-100' src="https://www.oaks.delivery/wp-content/plugins/woocommerce-kenpesa-gateway/assets/images/lipa-na-mpesa.png" />
-              </Col>
-            </Row>
-        </Card.Title>
-        <Card.Text>Send an M-Pesa payment request to your phone number.</Card.Text>
-      </Card.Body>
-          </Card>
+
           
           By placing an order I confirm that I'm 18 years or older and accept the <Link to="#"> terms and conditions</Link>
 
-<Button className='w-100 btn btn-block btn-success p-2'>
-  Proceed to Payment
-</Button>
+          <ListGroup>
+        {options.map((option, index) => (
+          <React.Fragment key={index}>
+            <ListGroup.Item action onClick={() => handleHeaderClick(index + 1)}>
+              <div>{option.label}</div>
+            </ListGroup.Item>
+            <Collapse in={openId === index + 1}>
+              <ListGroup.Item>
+                <div>{option.text}</div>
+              </ListGroup.Item>
+            </Collapse>
+          </React.Fragment>
+        ))}
+      </ListGroup>
+
+<Form.Item
+      wrapperCol={{
+        offset: 0,
+        span: 24,
+      }}
+    >
+      <Button type="primary" onClick={submitHandler}>
+      Proceed to Payment
+      </Button>
+    </Form.Item>
     </Col>
+    
   </Row>
-  
+  </Form>
   </div>
       )}
     </Container>

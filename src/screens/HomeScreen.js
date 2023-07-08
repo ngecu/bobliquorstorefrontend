@@ -11,6 +11,7 @@ import Meta from '../components/Meta'
 import { listProducts } from '../actions/productActions'
 import { Skeleton } from 'antd'
 import { listCategories } from '../actions/categoryActions'
+import { getAllBanners } from '../actions/bannerActions'
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
@@ -26,7 +27,12 @@ const HomeScreen = ({ match }) => {
   const categoryList = useSelector((state) => state.categoryList)
   const { categories } = categoryList
 
+  const bannerGetAll = useSelector((state) => state.bannerGetAll);
+  const { banners } = bannerGetAll;
+
   useEffect(() => {
+    dispatch(getAllBanners())
+
     dispatch(listCategories())
     dispatch(listProducts(keyword, pageNumber))
   }, [dispatch, keyword, pageNumber])
@@ -39,7 +45,7 @@ const HomeScreen = ({ match }) => {
         <>
         {loading ? (
         <Skeleton active />):(
-          <img src="https://www.oaks.delivery/wp-content/uploads/banner-1.png" className='w-100' />
+          <img src={banners[0]?.url} className='w-100' />
         )
         }
         </>

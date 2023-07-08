@@ -17,6 +17,8 @@ const ProductEditScreen = ({ match, history }) => {
   const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
   const [brand, setBrand] = useState('')
+  const [alcoholPercentage, setAlcoholPercentage] = useState(null)
+
   const [category, setCategory] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
@@ -150,6 +152,26 @@ const ProductEditScreen = ({ match, history }) => {
               {uploading && <Loader />}
             </Form.Group>
 
+
+
+            <Form.Group controlId='category'>
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+              as="select"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option>Select Category</option>
+              {categories &&
+                categories.map((i, index) => (
+                  <option key={i._id} value={i._id}>
+                    {i.name}
+                  </option>
+                ))}
+            </Form.Control>
+
+            </Form.Group>
+            
             <Form.Group controlId='brand'>
               <Form.Label>Brand</Form.Label>
               <Form.Control
@@ -170,23 +192,7 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='category'>
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-              as="select"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option>Select Category</option>
-              {categories &&
-                categories.map((i, index) => (
-                  <option key={i._id} value={i._id}>
-                    {i.name}
-                  </option>
-                ))}
-            </Form.Control>
 
-            </Form.Group>
 
             <Form.Group controlId='description'>
               <Form.Label>Description</Form.Label>

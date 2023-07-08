@@ -1,5 +1,5 @@
 body{
-  overflow-x: hidden;
+  overflow-x: hidden !important;
 }
 
 h3 {
@@ -241,3 +241,9 @@ nav{
 .cart-items {
   display: none;
 }
+.payment-option{
+cursor: pointer;
+transition: all 0s,visibility 0s;
+}
+.payment-option img{max-height: 1.618em;}
+

@@ -15,6 +15,9 @@ const CategoryEditScreen = ({ match, history }) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [image,setImage] = useState('');
+  const [brandings,setBrandings] = useState([]);
+
+  
 
   const dispatch = useDispatch()
 
@@ -43,7 +46,21 @@ const CategoryEditScreen = ({ match, history }) => {
     }
   }, [dispatch, history, categoryId, category, successUpdate])
 
-  
+  const handleAddInput = () => {
+    setBrandings([...brandings, '']);
+  };
+
+  const handleRemoveInput = (index) => {
+    const values = [...brandings];
+    values.splice(index, 1);
+    setBrandings(values);
+  };
+
+  const handleInputChange = (index, event) => {
+    const values = [...brandings];
+    values[index] = event.target.value;
+    setBrandings(values);
+  };
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -52,7 +69,8 @@ const CategoryEditScreen = ({ match, history }) => {
         _id: categoryId,
         name,
         description,
-        image
+        image,
+        brandings
       })
     )
   }
@@ -101,6 +119,30 @@ const CategoryEditScreen = ({ match, history }) => {
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
             </Form.Group>
+
+            {brandings.map((branding, index) => (
+        <Form.Group controlId={`branding-${index}`} key={index}>
+          <Form.Label>Branding {index + 1}</Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Enter branding'
+            value={branding}
+            onChange={(event) => handleInputChange(index, event)}
+          />
+          {index > 0 && (
+            <Button
+              variant='danger'
+              className='ml-2'
+              onClick={() => handleRemoveInput(index)}
+            >
+              Remove
+            </Button>
+          )}
+        </Form.Group>
+      ))}
+      <Button variant='primary' onClick={handleAddInput}>
+        Add More
+      </Button>
 
             <Button type='submit' variant='primary'>
               Update

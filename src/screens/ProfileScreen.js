@@ -18,6 +18,8 @@ import UserEditScreen from './UserEditScreen'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import { getUserWishes } from '../actions/wishActions'
 import WishlistScreen from './WishlistScreen'
+import BannerformScreen from './BannerformScreen'
+
 const ProfileScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -143,6 +145,11 @@ const ProfileScreen = () => {
           <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--edit-account">
             <Link to="/my-account/orders/">Orders</Link>
           </ListGroup.Item>
+
+          <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--edit-account">
+            <Link to="/my-account/banner/">Banners</Link>
+          </ListGroup.Item>
+
         </ListGroup>
           </>}
         </>
@@ -435,12 +442,14 @@ From your account dashboard you can view your <Link to="/orders">recent orders</
        <UserEditScreen match={match}/>
       )}
 
-
-
+{pathname === `/my-account/banner/` && (
+  <BannerformScreen />
+)}
       </Col>
     </Row>
     </>
   )
 }
+
 
 export default ProfileScreen

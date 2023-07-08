@@ -27,6 +27,7 @@ import OrdersScreen from './screens/OrdersScreen'
 import LostPasswordScreen from './screens/LostPasswordScreen'
 import NewPasswordScreen from './screens/NewPasswordScreen'
 import CheckoutScreen from './screens/CheckoutScreen'
+import MpesaexpresscheckoutScreen from './screens/MpesaexpresscheckoutScreen'
 
 const App = () => {
   const categoryList = useSelector((state) => state.categoryList)
@@ -54,7 +55,10 @@ const App = () => {
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
           <Route path="/lost-password" component={LostPasswordScreen} />
           <Route path="/new-password/:id/:token" component={NewPasswordScreen} />
+          <Route path="/m-pesa-express-checkout/" component={MpesaexpresscheckoutScreen} />
 
+
+          
           
           <Route
             path='/admin/productlist'

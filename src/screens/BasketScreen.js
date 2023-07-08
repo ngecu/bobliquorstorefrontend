@@ -26,7 +26,7 @@ const BasketScreen = ({ match, location, history }) => {
   }
 
   const checkoutHandler = () => {
-    history.push('/my-account/?redirect=shipping')
+    history.push('/checkout')
   }
 
   return (

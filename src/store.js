@@ -41,6 +41,7 @@ import {
   categoryDeleteReducer,
 } from './reducers/categoryReducers';
 
+import { bannerCreateReducer, bannerGetAllReducer, bannerDeleteReducer,bannerUpdateReducer } from './reducers/bannerReducers';
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -74,6 +75,10 @@ const reducer = combineReducers({
   categoryUpdate: categoryUpdateReducer,
   categoryDelete: categoryDeleteReducer,
 
+  bannerCreate: bannerCreateReducer,
+  bannerGetAll: bannerGetAllReducer,
+  bannerDelete: bannerDeleteReducer,
+  bannerUpdate: bannerUpdateReducer
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
