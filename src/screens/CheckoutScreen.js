@@ -338,7 +338,7 @@ console.log('Shipping Price:', shippingPrice, 'KES');
             <Button onClick={handleRetry}>Retry</Button>
           </Message>
         </div>
-      ) : isInsidePolygon ? (
+      ) : !isInsidePolygon ? (
         <div>
           <Message variant='danger'>
             Sorry. You cannot proceed since you are not in the designated location region.
