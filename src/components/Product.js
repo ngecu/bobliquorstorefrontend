@@ -33,8 +33,8 @@ const Product = ({ product }) => {
     const randomPercentage = Math.floor(Math.random() * 11); // Generates a random integer between 0 and 10
     setDiscountPercentage(randomPercentage);
 
-    const calculateNewPrice = product.price - (product.price * randomPercentage) / 100;
-    setNewPrice(calculateNewPrice.toFixed(2));
+    const calculateNewPrice = Math.ceil(product.price - (product.price * randomPercentage) / 100);
+    setNewPrice(calculateNewPrice);
   }, [product.price]);
 
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
@@ -6,8 +6,17 @@ import { Navbar, Nav, Container, NavDropdown, Row, Col, Dropdown } from 'react-b
 import SearchBox from './SearchBox'
 import { logout } from '../actions/userActions'
 import { Home, Favorite, AccountCircle, ShoppingCart } from '@material-ui/icons';
-const Header = ({categories}) => {
+import { Drawer } from 'antd'
+import { listCategories } from '../actions/categoryActions'
+import { Link } from 'react-router-dom'
+
+const Header = () => {
   const dispatch = useDispatch()
+
+
+  useEffect(() => {
+    dispatch(listCategories())
+  }, [dispatch])
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -15,17 +24,57 @@ const Header = ({categories}) => {
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
 
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState('left');
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const categoryList = useSelector((state) => state.categoryList)
+  const { categories } = categoryList
+
   return (
     <>
     <header>
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
+        <Nav className='mr-auto'>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' onClick={showDrawer}/>
+        </Nav>
+        
           <LinkContainer to='/'>
             <Navbar.Brand>
               {/* <img src="https://www.oaks.delivery/wp-content/uploads/onc-logo-svg-header.svg"/> */}
             Drink&Chill</Navbar.Brand>
           </LinkContainer>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          
+         
+         
+          <Nav className='ml-auto account'>
+        <LinkContainer id='account' to='/my-account/'>
+          <Nav.Link>
+            <div className='icon-text-wrapper'>
+              <i className='fas fa-user'></i>
+            </div>
+          </Nav.Link>
+        </LinkContainer>
+
+        <LinkContainer to='/basket'>
+        <Nav.Link>
+          <div className="basket-icon-wrapper icon-text-wrapper" >
+            <i className='fas fa-shopping-cart'></i>
+           
+          </div>
+        
+        </Nav.Link>
+      </LinkContainer>
+      </Nav>
+
           <Navbar.Collapse id='basic-navbar-nav'>
             <Route render={({ history }) =>   <SearchBox history={history} />} />
             <Nav className='ml-auto'>
@@ -119,47 +168,38 @@ const Header = ({categories}) => {
 
             </Nav>
           </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </header>
 
-    {/* <Row>
-      <Container>
-        <div className='d-flex'>
-          <div className='w-50 d-flex'>
-          
-          {categories && categories.map((category)=>(
-              <div className='mx-2'>
-            <Dropdown>
-            <Dropdown.Toggle id="dropdown-basic">
-          
-           {category.name}
-           
-           </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-          </Dropdown.Menu>
-          </Dropdown>
-          </div>
-          ))}
          
           
-          </div>
-          <div className='w-50'>
-          <Nav.Link className="position-relative">
-  <i className="fas fa-shopping-cart"></i>
-  {cartItemsCount > 0 && (
-    <span className="cart-items-count">{cartItemsCount}</span>
-  )}
-</Nav.Link>
-          </div>
-        </div>
-       
+        </Container>
+      </Navbar>
+      <div className='bg-dark form-small-device'>
+      <Container className='py-2'>
+      <Route render={({ history }) =>   <SearchBox history={history} />} />
       </Container>
-      </Row> */}
+      </div>
+    </header>
+
+
+    <Drawer
+        
+        placement={placement}
+        closable={false}
+        onClose={onClose}
+        open={open}
+        key={placement}
+      >
+        {categories && categories.map((category)=>(
+          <p>
+          <Link to={`/category/${category._id}`}>
+             <strong>{category.name}</strong>
+             </Link>
+             </p>
+            ))}
+            <h2>CALL US</h2>
+            <p>0707583092</p>
+      </Drawer>
+
     </>
   )
 }
