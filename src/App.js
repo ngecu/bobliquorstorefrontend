@@ -28,11 +28,13 @@ import LostPasswordScreen from './screens/LostPasswordScreen'
 import NewPasswordScreen from './screens/NewPasswordScreen'
 import CheckoutScreen from './screens/CheckoutScreen'
 import MpesaexpresscheckoutScreen from './screens/MpesaexpresscheckoutScreen'
+import { HelmetProvider } from 'react-helmet-async';
 
 const App = () => {
   const categoryList = useSelector((state) => state.categoryList)
   const { categories } = categoryList
   return (
+    <HelmetProvider>
     <Router>
       <Header  categories={categories}/>
       <main>
@@ -94,6 +96,7 @@ const App = () => {
       </main>
       <Footer />
     </Router>
+    </HelmetProvider>
   )
 }
 
