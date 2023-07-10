@@ -182,12 +182,13 @@ const Header = () => {
 
 
     <Drawer
-        
+        extra={ <i onClick={onClose} className="fas fa-circle-xmark"></i>}
         placement={placement}
         closable={false}
         onClose={onClose}
         open={open}
         key={placement}
+        
       >
         {categories && categories.map((category)=>(
           <p>
@@ -197,7 +198,7 @@ const Header = () => {
              </p>
             ))}
             <h2>CALL US</h2>
-            <p>0707583092</p>
+            <p>0792677146</p>
       </Drawer>
 
     </>
