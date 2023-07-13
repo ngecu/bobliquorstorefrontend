@@ -78,7 +78,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: USER_DETAILS_RESET })
   dispatch({ type: ORDER_LIST_MY_RESET })
   dispatch({ type: USER_LIST_RESET })
-  document.location.href = '/my-account/'
+  // document.location.href = '/my-account/'
 }
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -206,8 +206,8 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-
-    const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/users/${id}`, config)
+    
+    const { data } = await axios.get(`http://localhost:5000/api/users/${id}`, config)
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -245,7 +245,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(`https://bobliquorstoreapi.onrender.com/api/users/profile`, user, config)
+    const { data } = await axios.put(`http://localhost:5000/api/users/profile`, user, config)
 
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,

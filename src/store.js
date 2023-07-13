@@ -43,6 +43,14 @@ import {
 
 import { bannerCreateReducer, bannerGetAllReducer, bannerDeleteReducer,bannerUpdateReducer } from './reducers/bannerReducers';
 
+import {
+  eventListReducer,
+  eventDetailsReducer,
+  eventCreateReducer,
+  eventUpdateReducer,
+  eventDeleteReducer,
+} from './reducers/eventReducers';
+
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
@@ -78,7 +86,13 @@ const reducer = combineReducers({
   bannerCreate: bannerCreateReducer,
   bannerGetAll: bannerGetAllReducer,
   bannerDelete: bannerDeleteReducer,
-  bannerUpdate: bannerUpdateReducer
+  bannerUpdate: bannerUpdateReducer,
+
+  eventList: eventListReducer,
+  eventDetails: eventDetailsReducer,
+  eventCreate: eventCreateReducer,
+  eventUpdate: eventUpdateReducer,
+  eventDelete: eventDeleteReducer,
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')

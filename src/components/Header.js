@@ -37,7 +37,9 @@ const Header = () => {
 
   const categoryList = useSelector((state) => state.categoryList)
   const { categories } = categoryList
-
+  const logoutHandler = () => {
+    dispatch(logout())
+  }
   return (
     <>
     <header>
@@ -165,7 +167,6 @@ const Header = () => {
 
                 </Nav.Link>
               </LinkContainer>
-
             </Nav>
           </Navbar.Collapse>
 

@@ -204,7 +204,7 @@ export const listMyOrders = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/orders/myorders`, config)
+    const { data } = await axios.get(`http://localhost:5000/api/orders/myorders`, config)
 
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,

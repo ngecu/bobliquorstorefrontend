@@ -42,6 +42,7 @@ const CategoryEditScreen = ({ match, history }) => {
         setName(category.name)
         setDescription(category.description)
         setImage(category.image)
+        setBrandings(category.brandings)
       }
     }
   }, [dispatch, history, categoryId, category, successUpdate])
@@ -121,7 +122,9 @@ const CategoryEditScreen = ({ match, history }) => {
             </Form.Group>
 
             {brandings.map((branding, index) => (
-        <Form.Group controlId={`branding-${index}`} key={index}>
+              <>
+              <Form.Label>Brandings</Form.Label>
+                <Form.Group controlId={`branding-${index}`} key={index}>
           <Form.Label>Branding {index + 1}</Form.Label>
           <Form.Control
             type='text'
@@ -139,6 +142,8 @@ const CategoryEditScreen = ({ match, history }) => {
             </Button>
           )}
         </Form.Group>
+              </>
+      
       ))}
       <Button variant='primary' onClick={handleAddInput}>
         Add More

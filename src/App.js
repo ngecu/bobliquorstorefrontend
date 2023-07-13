@@ -29,6 +29,7 @@ import NewPasswordScreen from './screens/NewPasswordScreen'
 import CheckoutScreen from './screens/CheckoutScreen'
 import MpesaexpresscheckoutScreen from './screens/MpesaexpresscheckoutScreen'
 import { HelmetProvider } from 'react-helmet-async';
+import EventEditScreen from './screens/EventEditScreen'
 
 const App = () => {
   const categoryList = useSelector((state) => state.categoryList)
@@ -80,6 +81,7 @@ const App = () => {
             exact
           />
           <Route path='/admin/product/:id/edit' component={ProductEditScreen} />
+          <Route path='/admin/event/:id/edit' component={EventEditScreen} />
           <Route path='/admin/category/:id/edit' component={CategoryEditScreen} />
           <Route path='/admin/orderlist' component={OrderListScreen} />
           <Route path='/search/:keyword' component={HomeScreen} exact />

@@ -60,7 +60,7 @@ const HomeScreen = ({ match }) => {
       <Container>
       <>
 
-      <Row className='my-2'>
+      <Row className='my-2 w-100'>
           {categories && categories.map((category)=>(
             <Col key={category._id} xs={6} sm={6} md={3} lg={3} xl={3}>
                 <Link to={`/category/${category._id}`}>

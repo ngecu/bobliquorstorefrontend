@@ -1,8 +1,25 @@
-import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import { Container, Row, Col, Image } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import { listEvents } from '../actions/eventActions';
+import { listTopProducts } from '../actions/productActions';
+import Rating from './Rating';
 
 const Footer = () => {
+  const dispatch = useDispatch();
+
+  const eventList = useSelector((state) => state.eventList);
+  const { loading, error, events, page, pages } = eventList;
+  
+  const productTopRated = useSelector((state) => state.productTopRated)
+  const { products } = productTopRated
+
+  useEffect(() => {
+    dispatch(listEvents(''))
+    dispatch(listTopProducts())
+},[dispatch])
+
   return (
     <>
 <section className="">
@@ -59,40 +76,38 @@ const Footer = () => {
           {/* Grid row */}
           <Row className="mt-3">
             {/* Grid column */}
-            <Col md="3" lg="4" xl="3" className="mx-auto mb-4">
-              {/* Content */}
-              <p className="text-uppercase fw-bold mb-4">
-               About Drinks & Chill
-              </p>
-              
-            </Col>
-            {/* Grid column */}
-
-            {/* Grid column */}
-            <Col md="2" lg="2" xl="2" className="mx-auto mb-4">
+            <Col md="4" lg="4" xl="4" className="mx-auto mb-4">
               {/* Links */}
               <p className="text-uppercase fw-bold mb-4">
-                Liquor Store near me
+                Recent Events
               </p>
+              {events.slice(0, 2).map((event) => (
+                <p className='text-muted' key={event._id}>{event.name}</p>
+              ))}
               
-            </Col>
-            {/* Grid column */}
-
-            {/* Grid column */}
-            <Col md="3" lg="2" xl="2" className="mx-auto mb-4">
-              {/* Links */}
-              <p className="text-uppercase fw-bold mb-4">
-                Recent Posts
-              </p>
              
             </Col>
             {/* Grid column */}
 
             {/* Grid column */}
-            <Col md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
+            <Col md="4" lg="4" xl="4" className="mx-auto mb-md-0 mb-4">
               {/* Links */}
-              <p className="text-uppercase fw-bold mb-4">Recent Product Reviews</p>
-             
+              <p className="text-uppercase fw-bold mb-4">Top Rated Products</p>
+              {products.slice(0, 2).map((product) => (
+                <Row key={product._id}>
+                  <Col md={6} xs={6}>
+                    <p className='text-muted'>{product.name}</p>
+                    <Rating
+                      value={product.rating}
+                      // text={`${product.numReviews} reviews`}
+                    />
+                  </Col>
+                  <Col md={6} xs={6}>
+                    <Image src={product.image} alt={product.name} fluid width={50} />
+                  </Col>
+                </Row>
+))}
+
             </Col>
             {/* Grid column */}
           </Row>

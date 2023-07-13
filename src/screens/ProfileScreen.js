@@ -19,6 +19,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import { getUserWishes } from '../actions/wishActions'
 import WishlistScreen from './WishlistScreen'
 import BannerformScreen from './BannerformScreen'
+import EventListScreen from './EventListScreen'
 
 const ProfileScreen = () => {
   const [name, setName] = useState('')
@@ -59,7 +60,7 @@ const ProfileScreen = () => {
     } else {
       if (!user || !user.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
-        dispatch(getUserDetails('profile'))
+        dispatch(getUserDetails(userInfo?._id))
         dispatch(listMyOrders())
 
         if(pathname =="/my-account/cgkit-wishlist/"){
@@ -148,6 +149,10 @@ const ProfileScreen = () => {
 
           <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--edit-account">
             <Link to="/my-account/banner/">Banners</Link>
+          </ListGroup.Item>
+
+          <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--edit-account">
+            <Link to="/my-account/events/">Events</Link>
           </ListGroup.Item>
 
         </ListGroup>
@@ -444,6 +449,10 @@ From your account dashboard you can view your <Link to="/orders">recent orders</
 
 {pathname === `/my-account/banner/` && (
   <BannerformScreen />
+)}
+
+{pathname === `/my-account/events/` && (
+  <EventListScreen history={history} match={match} />
 )}
       </Col>
     </Row>
