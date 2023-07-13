@@ -129,11 +129,9 @@ const Footer = () => {
         </Col>
         <Col md={6}>
           <Link className="text-danger" to="#">
-          <i class="fas fa-phone"></i> +254707583092
+          <i class="fas fa-phone"></i> 0792677146
           </Link>
-          <Link to="#" className="text-secondary">
-            | +254759594677
-          </Link>
+         
         </Col>
       </Row>
       {/* Copyright */}
