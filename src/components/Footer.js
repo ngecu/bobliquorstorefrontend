@@ -24,7 +24,7 @@ const Footer = () => {
     <>
 <section className="">
   <Container className="text-center text-md-start mt-5">
-    <Row>
+    <Row className='w-100'>
       <Col xs={12} sm={3} md={3} lg={3} xl={3} className="text-left">
         <div id="custom_html-10" className="widget_text widget widget_custom_html">
           <b className="gamma widget-title">Over 1300 drinks available</b>
@@ -74,7 +74,7 @@ const Footer = () => {
       <section className="">
         <Container className="text-center text-md-start mt-5">
           {/* Grid row */}
-          <Row className="mt-3">
+          <Row className="mt-3 w-100">
             {/* Grid column */}
             <Col md="4" lg="4" xl="4" className="mx-auto mb-4">
               {/* Links */}
@@ -94,7 +94,7 @@ const Footer = () => {
               {/* Links */}
               <p className="text-uppercase fw-bold mb-4">Top Rated Products</p>
               {products?.slice(0, 2).map((product) => (
-                <Row key={product._id}>
+                <Row key={product._id} className='w-100'>
                   <Col md={6} xs={6}>
                     <p className='text-muted'>{product.name}</p>
                     <Rating
@@ -121,7 +121,7 @@ const Footer = () => {
        
         <a className="text-reset fw-bold" href="">DevNgecu</a> © 2023
       </div> */}
-      <Row>
+      <Row className='w-100'>
         <Col md={6} className='py-2'>
         © Drink & Chill  2023
         <br/>

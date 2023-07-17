@@ -105,7 +105,7 @@ const HomeScreen = ({ match }) => {
       }
     `}
   </style>
-  <Row className='flex-nowrap'>
+  <Row className='flex-nowrap w-100'>
     {products.map((product) => (
       <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className='px-1'>
         <Product product={product} />
@@ -141,7 +141,7 @@ const HomeScreen = ({ match }) => {
       }
     `}
   </style>
-  <Row>
+  <Row className='w-100'>
   {products
     .filter((product) => product.category === i._id)
     .map((product) => (
