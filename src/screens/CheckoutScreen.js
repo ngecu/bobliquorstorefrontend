@@ -230,29 +230,29 @@ console.log('Shipping Price:', shippingPrice, 'KES');
     //   text: 'Swipe your card on delivery. Pay with Visa or Mastercard.',
     //   value: 'swipe-on-delivery',
     // },
-    {
-      label: (
-        <div className="row payment-option" onClick={() => handleHeaderClick(4)}>
-          <div className="col-md-6">
-            <input type="radio" checked={openId === 4} readOnly />
-            Mpesa Classic (Buy Goods)
-          </div>
-          <div className="col-md-6">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0I4r6EvGlRkqDC2z6iDJoxVC5B7UYpP7pYjw1bfF3_YJMCjRHkJ7ZSV8QdlJoBn6sxILQPomCqbA1WMmB04l9cQkoJQMO8OIz0yOwQTMspMhtMl6YCBKLkuxrg-yY1dEIXDTHRm3v1PK2oaxsfgpukGYZGxjGzay-OfJVA9noFJEIiIwBcd5rT5J_/s728/1649413686874.jpg" alt="Mpesa Classic (Buy Goods)" />
-          </div>
-        </div>
-      ),
-      image: 'mpesa-classic-image-url',
-      text: (
-        <div className="row payment-option">
-          <div className="col-md-12">Use the following till number (Buy Goods and Services) to pay on or before delivery</div>
-          <div className="col-md-12">
-            <b>Till Number 622 841</b>
-          </div>
-        </div>
-      ),
-      value: 'mpesa-classic',
-    },
+    // {
+    //   label: (
+    //     <div className="row payment-option" onClick={() => handleHeaderClick(4)}>
+    //       <div className="col-md-6">
+    //         <input type="radio" checked={openId === 4} readOnly />
+    //         Mpesa Classic (Buy Goods)
+    //       </div>
+    //       <div className="col-md-6">
+    //         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0I4r6EvGlRkqDC2z6iDJoxVC5B7UYpP7pYjw1bfF3_YJMCjRHkJ7ZSV8QdlJoBn6sxILQPomCqbA1WMmB04l9cQkoJQMO8OIz0yOwQTMspMhtMl6YCBKLkuxrg-yY1dEIXDTHRm3v1PK2oaxsfgpukGYZGxjGzay-OfJVA9noFJEIiIwBcd5rT5J_/s728/1649413686874.jpg" alt="Mpesa Classic (Buy Goods)" />
+    //       </div>
+    //     </div>
+    //   ),
+    //   image: 'mpesa-classic-image-url',
+    //   text: (
+    //     <div className="row payment-option">
+    //       <div className="col-md-12">Use the following till number (Buy Goods and Services) to pay on or before delivery</div>
+    //       <div className="col-md-12">
+    //         <b>Till Number 622 841</b>
+    //       </div>
+    //     </div>
+    //   ),
+    //   value: 'mpesa-classic',
+    // },
     {
       label: (
         <div className="row payment-option" onClick={() => handleHeaderClick(5)}>
