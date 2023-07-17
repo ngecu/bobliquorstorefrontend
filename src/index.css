@@ -320,7 +320,7 @@ transition: all 0s,visibility 0s;
     display: none;
   }
   .ant-drawer-content-wrapper{
-    width: 30vw !important;
+    width: 70vw !important;
   }
  
 }
