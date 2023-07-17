@@ -319,5 +319,8 @@ transition: all 0s,visibility 0s;
   .category-row .col-md-2{
     display: none;
   }
+  .ant-drawer-content-wrapper{
+    width: 30vw !important;
+  }
  
 }
