@@ -16,7 +16,7 @@ const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id;
 
   const [name, setName] = useState('');
-  const [brandings, setBrandings] = useState([]);
+  const [branding, setBranding] = useState('');
   const [description, setDescription] = useState('');
   const [loadingBrandings, setLoadingBrandings] = useState(false);
   const [category, setCategory] = useState('');
@@ -47,26 +47,26 @@ const ProductEditScreen = ({ match, history }) => {
         dispatch(listCategories());
       } else {
         setName(product.name);
-        setBrandings(product.brandings);
+        setBranding(product.brandings);
         setDescription(product.description);
       }
     }
   }, [dispatch, history, productId, product, successUpdate]);
 
   const addBrandingHandler = () => {
-    setBrandings([...brandings, { branding: '', countInStock: 0, price: 0, size: '' }]);
+    // setBrandings([...brandings, { branding: '', countInStock: 0, price: 0, size: '' }]);
   };
 
   const removeBrandingHandler = (index) => {
-    const updatedBrandings = [...brandings];
-    updatedBrandings.splice(index, 1);
-    setBrandings(updatedBrandings);
+    // const updatedBrandings = [...brandings];
+    // updatedBrandings.splice(index, 1);
+    // setBrandings(updatedBrandings);
   };
 
   const brandingChangeHandler = (e, index) => {
-    const updatedBrandings = [...brandings];
-    updatedBrandings[index][e.target.name] = e.target.value;
-    setBrandings(updatedBrandings);
+    // const updatedBrandings = [...brandings];
+    // updatedBrandings[index][e.target.name] = e.target.value;
+    // setBrandings(updatedBrandings);
   };
 
   const submitHandler = (e) => {
@@ -75,7 +75,7 @@ const ProductEditScreen = ({ match, history }) => {
       updateProduct({
         _id: productId,
         name,
-        brandings,
+         branding,
         description,
       })
     );
@@ -111,34 +111,66 @@ const ProductEditScreen = ({ match, history }) => {
     <Form.Control
       as='select'
       value={category}
-      onChange={(e) => setCategory(e.target.value)}
+      onChange={(e) => {
+        setCategory(e.target.value)
+      }}
     >
       <option value=''>Select Category</option>
+      {categories.map((category) => (
+        <option key={category._id} value={category._id}>
+          {category.name}
+        </option>
+      ))}
+    </Form.Control>
+  </Form.Group>
+
+  {/* <Form.Group>
+  <Form.Label>Branding</Form.Label>
+  <Form.Control
+      as='select'
+      value={category}
+      onChange={(e) => {
+        setCategory(e.target.value)
+      }}
+    >
+      <option value=''>Select Brand</option>
       {categories.map((category) => (
         <option key={category._id} value={category}>
           {category.name}
         </option>
       ))}
     </Form.Control>
-  </Form.Group>
-{category &&   <Form.Group controlId='brandings'>
-    <Form.Label>Brandings</Form.Label>
+
+  </Form.Group> */}
+
+{category && (
+              <Form.Group controlId='brandings'>
+                <Form.Label>Branding</Form.Label>
+                <Form.Control
+                  as='select'
+                  value={branding}
+                  onChange={(e) => {
+                    setBranding(e.target.value);
+                  }}
+                >
+                  <option value=''>Select Brand</option>
+                  {categories
+        .find((cat) => cat._id === category)
+        ?.brandings.map((branding) => (
+          <option key={branding} value={branding}>
+            {branding}
+          </option>
+        ))}
+                </Form.Control>
+              </Form.Group>
+            )}
+
+{/* {category && branding &&   <Form.Group controlId='brandings'>
+    
     <Collapse accordion>
       {brandings.map((branding, index) => (
-        <Panel header={`Branding ${index + 1}`} key={index}>
+        <Panel header={`Variety ${index + 1}`} key={index}>
           <Row>
-            <Col sm={6}>
-              <Form.Group controlId={`branding${index}`}>
-                <Form.Label>Branding Name</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter branding name'
-                  name='branding'
-                  value={branding.branding}
-                  onChange={(e) => brandingChangeHandler(e, index)}
-                />
-              </Form.Group>
-            </Col>
             <Col sm={6}>
               <Form.Group controlId={`size${index}`}>
                 <Form.Label>Size</Form.Label>
@@ -199,7 +231,7 @@ const ProductEditScreen = ({ match, history }) => {
       ))}
     </Collapse>
     <Button onClick={addBrandingHandler}>Add Branding</Button>
-  </Form.Group>}
+  </Form.Group>} */}
  
 
   <Button disabled={category ? true: false} type='submit' variant='primary'>

@@ -81,7 +81,7 @@ const Footer = () => {
               <p className="text-uppercase fw-bold mb-4">
                 Recent Events
               </p>
-              {events.slice(0, 2).map((event) => (
+              {events?.slice(0, 2).map((event) => (
                 <p className='text-muted' key={event._id}>{event.name}</p>
               ))}
               
@@ -93,7 +93,7 @@ const Footer = () => {
             <Col md="4" lg="4" xl="4" className="mx-auto mb-md-0 mb-4">
               {/* Links */}
               <p className="text-uppercase fw-bold mb-4">Top Rated Products</p>
-              {products.slice(0, 2).map((product) => (
+              {products?.slice(0, 2).map((product) => (
                 <Row key={product._id}>
                   <Col md={6} xs={6}>
                     <p className='text-muted'>{product.name}</p>
