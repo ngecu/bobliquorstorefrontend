@@ -31,7 +31,7 @@ export const listProducts = (keyword = '', pageNumber = '') => async (
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
     const { data } = await axios.get(
-      `http://localhost:5000/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+      `https://bobliquorstoreapi.onrender.com/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
     )
 
     dispatch({
@@ -122,7 +122,7 @@ export const createProduct = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.post(`http://localhost:5000/api/products`, {}, config)
+    const { data } = await axios.post(`https://bobliquorstoreapi.onrender.com/api/products`, {}, config)
 
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
@@ -161,7 +161,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      `http://localhost:5000/api/products/${product._id}`,
+      `https://bobliquorstoreapi.onrender.com/api/products/${product._id}`,
       product,
       config
     )
