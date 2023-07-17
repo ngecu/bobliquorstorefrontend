@@ -89,8 +89,6 @@ const CategoryProductsScreen = ({ match }) => {
           <label>Prosecco <span className="facetwp-counter">(3)</span></label>
         </div>
       </div>
-      <a className="facetwp-toggle">See 5 more</a>
-      <a className="facetwp-toggle facetwp-hidden">See less</a>
     </div>
   </div>
 </div>

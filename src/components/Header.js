@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Navbar, Nav, Container, NavDropdown, Row, Col, Dropdown } from 'react-bootstrap'
+import { Navbar, Nav, Container, NavDropdown, Row, Col, Dropdown, ListGroup, ListGroupItem } from 'react-bootstrap'
 import SearchBox from './SearchBox'
 import { logout } from '../actions/userActions'
 import { Home, Favorite, AccountCircle, ShoppingCart } from '@material-ui/icons';
@@ -40,6 +40,7 @@ const Header = () => {
   const logoutHandler = () => {
     dispatch(logout())
   }
+  const [expanded, setExpanded] = useState(null);
   return (
     <>
     <header>
@@ -191,15 +192,53 @@ const Header = () => {
         key={placement}
         
       >
-        {categories && categories.map((category)=>(
-          <p>
-          <Link to={`/category/${category._id}`}>
-             <strong>{category.name}</strong>
-             </Link>
-             </p>
+        <div className='bg-dark text-light text-white p-2'>
+          {userInfo ? <div data-letters={userInfo.name[0]}> {userInfo.name}</div> : <div data-letters="AU"> Anonymous User</div>}
+            <p>CALL US 0792677146</p>
+        </div>
+       
+
+        <ListGroup>
+  {categories &&
+    categories.map((category) => (
+      <Dropdown
+        key={category._id}
+        onToggle={(isOpen) => {
+          if (isOpen) {
+            setExpanded(category._id);
+          } else {
+            setExpanded(null);
+          }
+        }}
+      >
+        <Dropdown.Toggle
+          variant="link"
+          id={`dropdown-category-${category._id}`}
+          as={Link}
+          to={`/category/${category._id}`}
+          className="text-decoration-none w-100 p-2"
+        >
+          <strong>{category.name}</strong>
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu className='w-100' show={expanded === category._id}>
+          {category.brandings &&
+            category.brandings.map((branding) => (
+              <Dropdown.Item
+                key={branding._id}
+                as={Link}
+                to={`/category/${category._id}?branding=${branding}`}
+                className='p-2'
+              >
+                {branding}
+              </Dropdown.Item>
             ))}
-            <h2>CALL US</h2>
-            <p>0792677146</p>
+        </Dropdown.Menu>
+      </Dropdown>
+    ))}
+</ListGroup>
+
+
       </Drawer>
 
     </>

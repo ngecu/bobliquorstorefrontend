@@ -17,10 +17,61 @@ const ProductEditScreen = ({ match, history }) => {
 
   const [name, setName] = useState('');
   const [branding, setBranding] = useState('');
+  const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
-  const [loadingBrandings, setLoadingBrandings] = useState(false);
-  const [category, setCategory] = useState('');
-  
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedBranding, setSelectedBranding] = useState('');
+  const [productDetailss, setProductDetailss] = useState([
+    { size: '', price: '', countInStock: '', description: '' },
+  ]);
+
+  // const handleCategoryChange = (e) => {
+  //   const categoryId = e.target.value;
+  //   setSelectedCategory(categoryId);
+  //   setSelectedBranding('');
+  // };
+
+  // const handleBrandingChange = (e) => {
+  //   const brandingId = e.target.value;
+  //   setSelectedBranding(brandingId);
+  // };
+
+  const handleSizeChange = (index, value) => {
+    const updatedDetails = [...productDetailss];
+    updatedDetails[index].size = value;
+    setProductDetailss(updatedDetails);
+  };
+
+  const handlePriceChange = (index, value) => {
+    const updatedDetails = [...productDetailss];
+    updatedDetails[index].price = value;
+    setProductDetailss(updatedDetails);
+  };
+
+  const handleCountInStockChange = (index, value) => {
+    const updatedDetails = [...productDetailss];
+    updatedDetails[index].countInStock = value;
+    setProductDetailss(updatedDetails);
+  };
+
+  const handleDescriptionChange = (index, value) => {
+    const updatedDetails = [...productDetailss];
+    updatedDetails[index].description = value;
+    setProductDetailss(updatedDetails);
+  };
+
+  const handleAddRow = () => {
+    const updatedDetails = [...productDetailss];
+    updatedDetails.push({ size: '', price: '', countInStock: '', description: '' });
+    setProductDetailss(updatedDetails);
+  };
+
+  const handleRemoveRow = (index) => {
+    const updatedDetails = [...productDetailss];
+    updatedDetails.splice(index, 1);
+    setProductDetailss(updatedDetails);
+  };
+
   
   const dispatch = useDispatch();
 
@@ -46,6 +97,7 @@ const ProductEditScreen = ({ match, history }) => {
         dispatch(listProductDetails(productId));
         dispatch(listCategories());
       } else {
+        console.log(product)
         setName(product.name);
         setBranding(product.brandings);
         setDescription(product.description);
@@ -53,32 +105,36 @@ const ProductEditScreen = ({ match, history }) => {
     }
   }, [dispatch, history, productId, product, successUpdate]);
 
-  const addBrandingHandler = () => {
-    // setBrandings([...brandings, { branding: '', countInStock: 0, price: 0, size: '' }]);
+
+
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setSelectedCategory(categoryId);
+    setSelectedBranding(''); // Reset the selected branding when the category changes
   };
 
-  const removeBrandingHandler = (index) => {
-    // const updatedBrandings = [...brandings];
-    // updatedBrandings.splice(index, 1);
-    // setBrandings(updatedBrandings);
+  const handleBrandingChange = (e) => {
+    const brandingId = e.target.value;
+    setSelectedBranding(brandingId);
   };
 
-  const brandingChangeHandler = (e, index) => {
-    // const updatedBrandings = [...brandings];
-    // updatedBrandings[index][e.target.name] = e.target.value;
-    // setBrandings(updatedBrandings);
-  };
 
   const submitHandler = (e) => {
     e.preventDefault();
+
+    const formData = {
+      _id:product._id,
+      name:name,
+      image:image,
+      category: selectedCategory,
+      branding: selectedBranding,
+      productDetails: productDetailss,
+    };
+    console.log(formData); // Dispatch or use the form data as required
     dispatch(
-      updateProduct({
-        _id: productId,
-        name,
-         branding,
-        description,
-      })
+      updateProduct(formData)
     );
+
   };
 
   return (
@@ -106,135 +162,114 @@ const ProductEditScreen = ({ match, history }) => {
     />
   </Form.Group>
 
-  <Form.Group controlId='category'>
-    <Form.Label>Category</Form.Label>
+  <Form.Group controlId='name'>
+    <Form.Label>Image</Form.Label>
     <Form.Control
-      as='select'
-      value={category}
-      onChange={(e) => {
-        setCategory(e.target.value)
-      }}
-    >
-      <option value=''>Select Category</option>
-      {categories.map((category) => (
-        <option key={category._id} value={category._id}>
-          {category.name}
-        </option>
-      ))}
-    </Form.Control>
+      type='text'
+      placeholder='Enter Image URL'
+      value={image}
+      onChange={(e) => setImage(e.target.value)}
+    />
   </Form.Group>
 
-  {/* <Form.Group>
-  <Form.Label>Branding</Form.Label>
-  <Form.Control
-      as='select'
-      value={category}
-      onChange={(e) => {
-        setCategory(e.target.value)
-      }}
-    >
-      <option value=''>Select Brand</option>
-      {categories.map((category) => (
-        <option key={category._id} value={category}>
-          {category.name}
-        </option>
-      ))}
-    </Form.Control>
 
-  </Form.Group> */}
+  <Form.Group controlId='category'>
+        <Form.Label>Category</Form.Label>
+        <Form.Control
+          as='select'
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+        >
+          <option value=''>Select Category</option>
+          {categories.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          ))}
+        </Form.Control>
+      </Form.Group>
 
-{category && (
-              <Form.Group controlId='brandings'>
-                <Form.Label>Branding</Form.Label>
-                <Form.Control
-                  as='select'
-                  value={branding}
-                  onChange={(e) => {
-                    setBranding(e.target.value);
-                  }}
-                >
-                  <option value=''>Select Brand</option>
-                  {categories
-        .find((cat) => cat._id === category)
-        ?.brandings.map((branding) => (
-          <option key={branding} value={branding}>
-            {branding}
-          </option>
-        ))}
-                </Form.Control>
-              </Form.Group>
+
+
+
+
+                    <Form.Group controlId='branding'>
+                    <Form.Label>Branding</Form.Label>
+                    <Form.Control
+                      as='select'
+                      value={selectedBranding}
+                      onChange={handleBrandingChange}
+                      disabled={!selectedCategory} // Disable the select input if no category is selected
+                    >
+                      <option value=''>Select Brand</option>
+                      {selectedCategory &&
+                        categories
+                          .find((category) => category._id === selectedCategory)
+                          .brandings.map((branding, index) => (
+                            <option key={index} value={branding}>
+                              {branding}
+                            </option>
+                          ))}
+                    </Form.Control>
+                  </Form.Group>
+          
+                  {productDetailss.map((detail, index) => (
+        <div key={index}>
+          <Form.Row>
+            <Form.Group as={Col} controlId={`size-${index}`}>
+              <Form.Label>Size(in ml)</Form.Label>
+              <Form.Control
+                type='number'
+                value={detail.size}
+                onChange={(e) => handleSizeChange(index, e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId={`price-${index}`}>
+              <Form.Label>Price(in Kesh)</Form.Label>
+              <Form.Control
+                type='number'
+                value={detail.price}
+                onChange={(e) => handlePriceChange(index, e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId={`countInStock-${index}`}>
+              <Form.Label>Count in Stock</Form.Label>
+              <Form.Control
+                type='number'
+                value={detail.countInStock}
+                onChange={(e) => handleCountInStockChange(index, e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId={`description-${index}`}>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type='text'
+                value={detail.description}
+                onChange={(e) => handleDescriptionChange(index, e.target.value)}
+              />
+            </Form.Group>
+
+            {index > 0 && (
+              <Button variant='danger' onClick={() => handleRemoveRow(index)}>
+                Remove
+              </Button>
             )}
-
-{/* {category && branding &&   <Form.Group controlId='brandings'>
-    
-    <Collapse accordion>
-      {brandings.map((branding, index) => (
-        <Panel header={`Variety ${index + 1}`} key={index}>
-          <Row>
-            <Col sm={6}>
-              <Form.Group controlId={`size${index}`}>
-                <Form.Label>Size</Form.Label>
-                <Form.Control
-                  type='text'
-                  placeholder='Enter size'
-                  name='size'
-                  value={branding.size}
-                  onChange={(e) => brandingChangeHandler(e, index)}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Group controlId={`price${index}`}>
-                <Form.Label>Price</Form.Label>
-                <Form.Control
-                  type='number'
-                  placeholder='Enter price'
-                  name='price'
-                  value={branding.price}
-                  onChange={(e) => brandingChangeHandler(e, index)}
-                />
-              </Form.Group>
-            </Col>
-            <Col sm={6}>
-              <Form.Group controlId={`countInStock${index}`}>
-                <Form.Label>Count In Stock</Form.Label>
-                <Form.Control
-                  type='number'
-                  placeholder='Enter countInStock'
-                  name='countInStock'
-                  value={branding.countInStock}
-                  onChange={(e) => brandingChangeHandler(e, index)}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Form.Group controlId={`description${index}`}>
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              as='textarea'
-              rows={3}
-              placeholder='Enter description'
-              name='description'
-              value={branding.description}
-              onChange={(e) => brandingChangeHandler(e, index)}
-            />
-          </Form.Group>
-          <Button
-            variant='danger'
-            onClick={() => removeBrandingHandler(index)}
-          >
-            Remove Branding
-          </Button>
-        </Panel>
+          </Form.Row>
+        </div>
       ))}
-    </Collapse>
-    <Button onClick={addBrandingHandler}>Add Branding</Button>
-  </Form.Group>} */}
- 
 
-  <Button disabled={category ? true: false} type='submit' variant='primary'>
+      {/* Add row button */}
+      <Button variant='primary' onClick={handleAddRow}>
+        Add Row
+      </Button>
+
+
+
+
+  <Button type='submit' variant='primary'>
     Update
   </Button>
 </Form>

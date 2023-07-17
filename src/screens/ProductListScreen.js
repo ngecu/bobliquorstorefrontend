@@ -104,13 +104,20 @@ const ProductListScreen = ({ history, match }) => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
-                <tr key={product._id}>
-                  <td><img src={product.image} width={40} /></td>
-                  <td>{product.name}</td>
-                  <td>Ksh.{product.price}</td>
-                  <td>{product.brand}</td>
-                  <td>
+            {products.map((product) => (
+  <React.Fragment key={product._id}>
+    <tr>
+      <td> <img src={product.image} width={40} /></td>
+      <td rowSpan={product.productDetails.length + 1}>{product.name}</td>
+      <td rowSpan={product.productDetails.length + 1}>Ksh.{product.price}</td>
+    </tr>
+    {product.productDetails.map((detail, index) => (
+      <tr key={index}>
+        <td>Size: {detail.size}</td>
+        <td>Price: Ksh.{detail.price}</td>
+        <td>Count in Stock: {detail.countInStock}</td>
+        <td>Description: {detail.description}</td>
+        <td>
                     <LinkContainer to={`/admin/product/${product._id}/edit`}>
                       <Button variant='light' className='btn-sm'>
                         <i className='fas fa-edit'></i>
@@ -124,8 +131,10 @@ const ProductListScreen = ({ history, match }) => {
                       <i className='fas fa-trash'></i>
                     </Button>
                   </td>
-                </tr>
-              ))}
+      </tr>
+    ))}
+  </React.Fragment>
+))}
             </tbody>
           </Table>
           <Paginate pages={pages} page={page} isAdmin={true} />
