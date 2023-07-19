@@ -262,7 +262,7 @@ console.log('Shipping Price:', shippingPrice, 'KES');
         current={1}
         items={[
           {
-            title: 'Shipping Basket',
+            title: 'Shopping Basket',
           },
           {
             title: 'Details and Checkout',

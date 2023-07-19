@@ -60,10 +60,6 @@ const Product = ({ product }) => {
     dispatch(removeFromCart(id))
   }
 
-  const checkoutHandler = () => {
-    // navigate.push('/login?redirect=shipping')
-  }
-
   const calculateProgress = () => {
     const totalCash = 15000; // Set the total cash amount
     const cartTotal = cartItems.reduce(
@@ -73,6 +69,7 @@ const Product = ({ product }) => {
     const progressPercentage = Math.round((cartTotal / totalCash) * 100);
     return progressPercentage;
   };
+  
   const MAX_NAME_LENGTH = 30;
   const shortenProductName = (name) => {
     if (name.length <= MAX_NAME_LENGTH) return name;
@@ -104,10 +101,14 @@ const Product = ({ product }) => {
         <Link to={`product/${product._id}`}>{shortenProductName(product.name)}</Link>
           </Card.Title>
         <Card.Text className='my-0'>
-          {discountPercentage > 0 && (
+          <Row>
+            <Col md={6} xs={6}>
             <del>{newPrice}/-</del>
-          )}
-          <ins>{product.price}/-</ins>
+            </Col>
+            <Col md={6} xs={6}>
+            <ins>{product.price}/-</ins>
+            </Col>
+          </Row>
         </Card.Text>
         <Card.Text as='div'>
           <Rating

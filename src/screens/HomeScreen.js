@@ -161,7 +161,7 @@ const HomeScreen = ({ match }) => {
   {products
     .filter((product) => product.category === i._id)
     .map((product) => (
-      <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className="h-100">
+      <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className="h-100 px-1">
         <Product product={product} />
       </Col>
     ))}

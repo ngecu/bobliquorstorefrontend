@@ -10,13 +10,47 @@ import {
   listProductDetails,
   createProductReview,
 } from '../actions/productActions'
+import parse from 'html-react-parser';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
-import Product from '../components/Product'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
+
+
+  const [open, setOpen] = useState(false);
+
+  const handleWishlistAdd = (product)=>{
+    console.log("prodcut addeing to wishlist")
+    const productId = product._id
+    dispatch(addToWish(productId, userInfo._id))
+  }
+
+  const showDrawer = (product) => {
+    const productId = product._id
+    dispatch(addToCart(productId, 1))
+
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const removeFromCartHandler = (id) => {
+    dispatch(removeFromCart(id))
+  }
+
+  const calculateProgress = () => {
+    const totalCash = 15000; // Set the total cash amount
+    const cartTotal = cartItems.reduce(
+      (total, item) => total + item.qty * item.price,
+      0
+    );
+    const progressPercentage = Math.round((cartTotal / totalCash) * 100);
+    return progressPercentage;
+  };
 
   const dispatch = useDispatch()
 
@@ -25,6 +59,9 @@ const ProductScreen = ({ history, match }) => {
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const cart = useSelector((state) => state.cart)
+  const { cartItems } = cart
 
   const productReviewCreate = useSelector((state) => state.productReviewCreate)
   const {
@@ -59,6 +96,7 @@ const ProductScreen = ({ history, match }) => {
   }
 
   return (
+    <>
     <Container>
       {/* <Link className='btn btn-primary my-3' to='/'>
         Go Back
@@ -87,7 +125,7 @@ const ProductScreen = ({ history, match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>Price: Ksh.{product.price}</ListGroup.Item>
                 <ListGroup.Item>
-                  Description: {product.description}
+                  Description: {parse(product.description)}
                 </ListGroup.Item>
               </ListGroup>
 
@@ -136,9 +174,10 @@ const ProductScreen = ({ history, match }) => {
 
                   <ListGroup.Item>
                     <Button
-                      onClick={addToCartHandler}
-                      className='btn-block'
+                      onClick={()=>showDrawer(product)}
+                      className='btn-block btn-success w-100'
                       type='button'
+                      variant='success'
                       disabled={product.countInStock === 0}
                     >
                       Add To Cart
@@ -229,6 +268,95 @@ const ProductScreen = ({ history, match }) => {
         </>
       )}
     </Container>
+
+<Drawer
+title={
+  <>
+    <p>Basket</p>
+    <Progress percent={calculateProgress()} showInfo={false} />
+    <div className='text-center'>
+      <small>Get free delivery for orders over 15,000/-</small>
+    </div>
+  </>
+}
+placement="right"
+onClose={onClose}
+visible={open}
+>
+{cartItems.length === 0 ? (
+  <Message>
+    Your cart is empty <Link to="/">Go Back</Link>
+  </Message>
+) : (
+  <>
+    <Table responsive className='table-sm'>
+      <tbody>
+        {cartItems.map((item) => (
+          <tr key={item.product}>
+            <td>
+              <Button
+                type='button'
+                variant='light'
+                onClick={() => removeFromCartHandler(item.product)}
+              >
+                <i className='fas fa-trash'></i>
+              </Button>
+            </td>
+            <td>
+              <Link to={`/product/${item.product}`}>{item.name}</Link>
+              <br />
+              {item.price}/-
+              <br />
+              <Form.Control
+                as='select'
+                value={item.qty}
+                onChange={(e) =>
+                  dispatch(addToCart(item.product, Number(e.target.value)))
+                }
+              >
+                {[...Array(item.countInStock).keys()].map((x) => (
+                  <option key={x + 1} value={x + 1}>
+                    {x + 1}
+                  </option>
+                ))}
+              </Form.Control>
+            </td>
+            <td>
+              <img src={item.image} className='w-100' alt={item.name} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+    <Card className='mt-auto'>
+      <ListGroup variant='flush'>
+        <ListGroup.Item>
+          <h2>
+            Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+            items
+          </h2>
+          Ksh.
+          {cartItems
+            .reduce((acc, item) => acc + item.qty * item.price, 0)
+            .toFixed(2)}
+        </ListGroup.Item>
+
+        <ListGroup.Item>
+          <Link to="/basket" className="btn btn-secondary btn-block w-100">View Basket</Link>
+        </ListGroup.Item>
+
+        <ListGroup.Item>
+          <Link to="/checkout" className="btn btn-success btn-block w-100">
+            Proceed To Checkout
+          </Link>
+        </ListGroup.Item>
+      </ListGroup>
+    </Card>
+    <img src="https://www.oaks.delivery/wp-content/uploads/mini-cart-payment-methods-ke.png" className='w-100' />
+  </>
+)}
+</Drawer>
+</>
   )
 }
 

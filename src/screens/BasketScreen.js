@@ -31,9 +31,23 @@ const BasketScreen = ({ match, location, history }) => {
 
   return (
     <Container>
+       <Steps
+        className='my-2'
+        current={0}
+        items={[
+          {
+            title: 'Shopping Basket',
+          },
+          {
+            title: 'Details and Checkout',
+          },
+          {
+            title: 'Confirmation',
+          },
+        ]}
+      />
     <Row>
       <Col md={8}>
-        <h1>Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
             Your cart is empty <Link to='/'>Go Back</Link>
@@ -43,14 +57,14 @@ const BasketScreen = ({ match, location, history }) => {
             {cartItems.map((item) => (
               <ListGroup.Item key={item.product}>
                 <Row>
-                  <Col md={2}>
+                  <Col md={2} xs={2}>
                     <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
-                  <Col md={3}>
+                  <Col md={3} xs={3}>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                   </Col>
-                  <Col md={2}>Ksh.{item.price}</Col>
-                  <Col md={2}>
+                  <Col md={2} xs={2}>Ksh.{item.price}</Col>
+                  <Col md={2} xs={2}>
                     <Form.Control
                       as='select'
                       value={item.qty}
@@ -67,7 +81,7 @@ const BasketScreen = ({ match, location, history }) => {
                       ))}
                     </Form.Control>
                   </Col>
-                  <Col md={2}>
+                  <Col md={2} xs={2}>
                     <Button
                       type='button'
                       variant='light'
