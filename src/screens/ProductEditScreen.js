@@ -10,6 +10,8 @@ import { listProductDetails, updateProduct } from '../actions/productActions';
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
 import { listCategories } from '../actions/categoryActions';
 import { Collapse } from 'antd';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const { Panel } = Collapse;
 const ProductEditScreen = ({ match, history }) => {
@@ -21,56 +23,10 @@ const ProductEditScreen = ({ match, history }) => {
   const [description, setDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedBranding, setSelectedBranding] = useState('');
-  const [productDetailss, setProductDetailss] = useState([
-    { size: '', price: '', countInStock: '', description: '' },
-  ]);
-
-  // const handleCategoryChange = (e) => {
-  //   const categoryId = e.target.value;
-  //   setSelectedCategory(categoryId);
-  //   setSelectedBranding('');
-  // };
-
-  // const handleBrandingChange = (e) => {
-  //   const brandingId = e.target.value;
-  //   setSelectedBranding(brandingId);
-  // };
-
-  const handleSizeChange = (index, value) => {
-    const updatedDetails = [...productDetailss];
-    updatedDetails[index].size = value;
-    setProductDetailss(updatedDetails);
-  };
-
-  const handlePriceChange = (index, value) => {
-    const updatedDetails = [...productDetailss];
-    updatedDetails[index].price = value;
-    setProductDetailss(updatedDetails);
-  };
-
-  const handleCountInStockChange = (index, value) => {
-    const updatedDetails = [...productDetailss];
-    updatedDetails[index].countInStock = value;
-    setProductDetailss(updatedDetails);
-  };
-
-  const handleDescriptionChange = (index, value) => {
-    const updatedDetails = [...productDetailss];
-    updatedDetails[index].description = value;
-    setProductDetailss(updatedDetails);
-  };
-
-  const handleAddRow = () => {
-    const updatedDetails = [...productDetailss];
-    updatedDetails.push({ size: '', price: '', countInStock: '', description: '' });
-    setProductDetailss(updatedDetails);
-  };
-
-  const handleRemoveRow = (index) => {
-    const updatedDetails = [...productDetailss];
-    updatedDetails.splice(index, 1);
-    setProductDetailss(updatedDetails);
-  };
+  const [price, setPrice] = useState(0)
+  const [discount,setDiscount] = useState('')
+  const [editorContent, setEditorContent] = useState(null);
+  const [countInStock, setCountInStock] = useState(0)
 
   
   const dispatch = useDispatch();
@@ -99,13 +55,33 @@ const ProductEditScreen = ({ match, history }) => {
       } else {
         console.log(product)
         setName(product.name);
-        setBranding(product.brandings);
+        setBranding(product.branding);
         setDescription(product.description);
+        setPrice(product.price)
+        setDiscount(product.discount)
+        setImage(product.image)
+        setSelectedCategory(product.category)
+        setSelectedBranding(product.branding)
+        setCountInStock(product.countInStock)
       }
     }
   }, [dispatch, history, productId, product, successUpdate]);
 
 
+  useEffect(() => {
+    // ... existing code
+
+    // Set the editor's initial content if product.description exists
+    if (product.description) {
+      setEditorContent(product.description);
+    }
+  }, [dispatch, history, productId, product, successUpdate]);
+
+
+   // Define the handler for editor content changes
+   const handleEditorChange = (contentState) => {
+    setEditorContent(contentState);
+  };
 
   const handleCategoryChange = (e) => {
     const categoryId = e.target.value;
@@ -119,22 +95,22 @@ const ProductEditScreen = ({ match, history }) => {
   };
 
 
-  const submitHandler = (e) => {
+const submitHandler = (e) => {
     e.preventDefault();
 
     const formData = {
-      _id:product._id,
-      name:name,
-      image:image,
+      _id: product._id,
+      name: name,
+      image: image,
       category: selectedCategory,
       branding: selectedBranding,
-      productDetails: productDetailss,
+      description: editorContent, // Add the editor content to the form data
+      price: price,
+      discount: discount,
+      countInStock:countInStock
     };
     console.log(formData); // Dispatch or use the form data as required
-    dispatch(
-      updateProduct(formData)
-    );
-
+    dispatch(updateProduct(formData));
   };
 
   return (
@@ -161,6 +137,26 @@ const ProductEditScreen = ({ match, history }) => {
       onChange={(e) => setName(e.target.value)}
     />
   </Form.Group>
+
+  <Form.Group controlId='price'>
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter price'
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='discount'>
+              <Form.Label>Discount</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter Discount'
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
   <Form.Group controlId='name'>
     <Form.Label>Image</Form.Label>
@@ -189,84 +185,39 @@ const ProductEditScreen = ({ match, history }) => {
         </Form.Control>
       </Form.Group>
 
+      <Form.Group controlId='branding'>
+  <Form.Label>Branding</Form.Label>
+  <Form.Control
+    as='select'
+    value={selectedBranding}
+    onChange={handleBrandingChange}
+    disabled={!selectedCategory} // Disable the select input if no category is selected
+  >
+    <option value=''>Select Brand</option>
+    {selectedCategory &&
+      categories
+        .find((category) => category._id === selectedCategory)
+        ?.brandings.map((branding, index) => ( // Add the optional chaining here as well
+          <option key={index} value={branding}>
+            {branding}
+          </option>
+        ))}
+  </Form.Control>
+</Form.Group>
 
 
-
-
-                    <Form.Group controlId='branding'>
-                    <Form.Label>Branding</Form.Label>
-                    <Form.Control
-                      as='select'
-                      value={selectedBranding}
-                      onChange={handleBrandingChange}
-                      disabled={!selectedCategory} // Disable the select input if no category is selected
-                    >
-                      <option value=''>Select Brand</option>
-                      {selectedCategory &&
-                        categories
-                          .find((category) => category._id === selectedCategory)
-                          .brandings.map((branding, index) => (
-                            <option key={index} value={branding}>
-                              {branding}
-                            </option>
-                          ))}
-                    </Form.Control>
-                  </Form.Group>
-          
-                  {productDetailss.map((detail, index) => (
-        <div key={index}>
-          <Form.Row>
-            <Form.Group as={Col} controlId={`size-${index}`}>
-              <Form.Label>Size(in ml)</Form.Label>
+<Form.Group controlId='countInStock'>
+              <Form.Label>Count In Stock</Form.Label>
               <Form.Control
                 type='number'
-                value={detail.size}
-                onChange={(e) => handleSizeChange(index, e.target.value)}
-              />
+                placeholder='Enter countInStock'
+                value={countInStock}
+                onChange={(e) => setCountInStock(e.target.value)}
+              ></Form.Control>
             </Form.Group>
 
-            <Form.Group as={Col} controlId={`price-${index}`}>
-              <Form.Label>Price(in Kesh)</Form.Label>
-              <Form.Control
-                type='number'
-                value={detail.price}
-                onChange={(e) => handlePriceChange(index, e.target.value)}
-              />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId={`countInStock-${index}`}>
-              <Form.Label>Count in Stock</Form.Label>
-              <Form.Control
-                type='number'
-                value={detail.countInStock}
-                onChange={(e) => handleCountInStockChange(index, e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId={`description-${index}`}>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type='text'
-                value={detail.description}
-                onChange={(e) => handleDescriptionChange(index, e.target.value)}
-              />
-            </Form.Group>
-
-            {index > 0 && (
-              <Button variant='danger' onClick={() => handleRemoveRow(index)}>
-                Remove
-              </Button>
-            )}
-          </Form.Row>
-        </div>
-      ))}
-
-      {/* Add row button */}
-      <Button variant='primary' onClick={handleAddRow}>
-        Add Row
-      </Button>
-
-
+                  <ReactQuill theme="snow" value={editorContent} onChange={handleEditorChange} />
 
 
   <Button type='submit' variant='primary'>

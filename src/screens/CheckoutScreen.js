@@ -197,67 +197,12 @@ console.log('Shipping Price:', shippingPrice, 'KES');
       text: 'Send an M-Pesa payment request to your phone number.',
       value: 'mpesa-express',
     },
-    // {
-    //   label: (
-    //     <div className="row payment-option" onClick={() => handleHeaderClick(2)}>
-    //       <div className="col-md-6">
-    //         <input type="radio" checked={openId === 2} readOnly />
-    //         3D Secure Visa/Mastercard
-    //       </div>
-    //       <div className="col-md-6">
-    //         <img src="https://www.oaks.delivery/wp-content/plugins/woocommerce/assets/images/icons/credit-cards/visa.svg" alt="Visa" />
-    //         <img src="https://www.oaks.delivery/wp-content/plugins/woocommerce/assets/images/icons/credit-cards/mastercard.svg" alt="Mastercard" />
-    //       </div>
-    //     </div>
-    //   ),
-    //   image: 'visa-mastercard-image-url',
-    //   text: 'Pay online via your VISA or Mastercard (3D Secure). An OTP code will be sent by your bank to your phone number and/or email to confirm the transaction. 3D Secure needs to be active for your card – your bank can activate this security feature.',
-    //   value: 'visa-mastercard',
-    // },
-    // {
-    //   label: (
-    //     <div className="row payment-option" onClick={() => handleHeaderClick(3)}>
-    //       <div className="col-md-6">
-    //         <input type="radio" checked={openId === 3} readOnly />
-    //         Swipe on Delivery
-    //       </div>
-    //       <div className="col-md-6">
-    //         <img src="https://www.oaks.delivery/wp-content/plugins/cards/images/pdq.jpg" alt="Swipe on Delivery" />
-    //       </div>
-    //     </div>
-    //   ),
-    //   image: 'swipe-on-delivery-image-url',
-    //   text: 'Swipe your card on delivery. Pay with Visa or Mastercard.',
-    //   value: 'swipe-on-delivery',
-    // },
-    // {
-    //   label: (
-    //     <div className="row payment-option" onClick={() => handleHeaderClick(4)}>
-    //       <div className="col-md-6">
-    //         <input type="radio" checked={openId === 4} readOnly />
-    //         Mpesa Classic (Buy Goods)
-    //       </div>
-    //       <div className="col-md-6">
-    //         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0I4r6EvGlRkqDC2z6iDJoxVC5B7UYpP7pYjw1bfF3_YJMCjRHkJ7ZSV8QdlJoBn6sxILQPomCqbA1WMmB04l9cQkoJQMO8OIz0yOwQTMspMhtMl6YCBKLkuxrg-yY1dEIXDTHRm3v1PK2oaxsfgpukGYZGxjGzay-OfJVA9noFJEIiIwBcd5rT5J_/s728/1649413686874.jpg" alt="Mpesa Classic (Buy Goods)" />
-    //       </div>
-    //     </div>
-    //   ),
-    //   image: 'mpesa-classic-image-url',
-    //   text: (
-    //     <div className="row payment-option">
-    //       <div className="col-md-12">Use the following till number (Buy Goods and Services) to pay on or before delivery</div>
-    //       <div className="col-md-12">
-    //         <b>Till Number 622 841</b>
-    //       </div>
-    //     </div>
-    //   ),
-    //   value: 'mpesa-classic',
-    // },
+    
     {
       label: (
         <div className="row payment-option" onClick={() => handleHeaderClick(5)}>
           <div className="col-md-12">
-            <input type="radio" checked={openId === 5} readOnly />
+            <input type="radio" checked={openId === 2} readOnly />
             Cash on Delivery
           </div>
         </div>
@@ -410,9 +355,6 @@ console.log('Shipping Price:', shippingPrice, 'KES');
         <Input value={email} onChange={(e) => setEmail(e.target.value)} />
       </Form.Item>
 
-    
-
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31916.009556217203!2d37.1352006026841!3d-0.7224033406879049!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1828a28207db7113%3A0xbc8b3625ac089be8!2sMurang&#39;a!5e0!3m2!1sen!2ske!4v1688477953494!5m2!1sen!2ske"  height="450" style={{width:"100%",border:"0", allowfullscreen:"", loading:"lazy", referrerpolicy:"no-referrer-when-downgrade"}}></iframe>
       <Form.Item
         label="Additional Notes"
         name="additional_notes"
@@ -423,6 +365,9 @@ console.log('Shipping Price:', shippingPrice, 'KES');
       >
         <Input  value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} />
       </Form.Item> 
+    
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31916.009556217203!2d37.1352006026841!3d-0.7224033406879049!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1828a28207db7113%3A0xbc8b3625ac089be8!2sMurang&#39;a!5e0!3m2!1sen!2ske!4v1688477953494!5m2!1sen!2ske"  height="450" style={{width:"100%",border:"0", allowfullscreen:"", loading:"lazy", referrerpolicy:"no-referrer-when-downgrade"}}></iframe>
 
 
     </Col>

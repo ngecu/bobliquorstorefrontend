@@ -345,5 +345,10 @@ transition: all 0s,visibility 0s;
 .dropdown-toggle::after {
   left: 85% !important;
 }
-
+.product-card.card .card-body{
+  padding :0 !important;
+}
+h6{
+  margin-top: 1%;
+}
   
