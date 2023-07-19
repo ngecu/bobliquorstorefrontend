@@ -73,6 +73,11 @@ const Product = ({ product }) => {
     const progressPercentage = Math.round((cartTotal / totalCash) * 100);
     return progressPercentage;
   };
+  const MAX_NAME_LENGTH = 30;
+  const shortenProductName = (name) => {
+    if (name.length <= MAX_NAME_LENGTH) return name;
+    return name.substring(0, MAX_NAME_LENGTH) + '...';
+  };
 
   return (
     <>
@@ -95,7 +100,9 @@ const Product = ({ product }) => {
         )}
       </div>
       <Card.Body>
-        <Card.Title><Link to={`product/${product._id}`}>{product.name}</Link></Card.Title>
+        <Card.Title>
+        <Link to={`product/${product._id}`}>{shortenProductName(product.name)}</Link>
+          </Card.Title>
         <Card.Text className='my-0'>
           {discountPercentage > 0 && (
             <del>{newPrice}/-</del>

@@ -288,7 +288,7 @@ console.log('Shipping Price:', shippingPrice, 'KES');
           <Message variant='danger'>
             Sorry. You cannot proceed since you are not in the designated location region.
             <br />
-            <Button onClick={handleRetry}>Retry</Button>
+            <Button onClick={handleRetry}>Refresh GPS</Button>
           </Message>
           
         </div>

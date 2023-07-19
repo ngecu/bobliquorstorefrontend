@@ -44,7 +44,7 @@ const WishlistScreen = ({ history, match }) => {
     // successDelete,
     // successCreate,
     // createdProduct,
-    pageNumber,
+    pageNumber
   ])
 
   const deleteHandler = (id) => {
@@ -86,29 +86,31 @@ const WishlistScreen = ({ history, match }) => {
               {wishItems && wishItems.map((item) => (
                 <tr key={item.product}>
                   <td>
-                  <Button
-                    variant='danger'
-                    className='btn-sm'
-                    onClick={() => deleteHandler(item._id)}
-                  >
-                    <i className='fas fa-trash'></i>
-                  </Button>
+                  
                   <img src={item.image} width={100} />
                   {item.name}
                   </td>
                  <td>
-                    {item.price}
+                    {item.price} /-
                  </td>
                  <td>
                     <b className='text-success'>In stock</b>
                  </td>
                  <td>
                     <Button 
-                    type="button" 
+                    className='btn-sm'
                     variant="success"
                      onClick={(e)=>dispatch(addToCart(item._id, 1))} >
-                      Add To Cart
+                        <i className='fas fa-shopping-cart'></i>
                      </Button>
+
+                     <Button
+                    variant='danger'
+                    className='btn-sm'
+                    onClick={() => deleteHandler(item._id)}
+                  >
+                    <i className='fas fa-trash'></i>
+                  </Button>
                  </td>
                 </tr>
               ))}

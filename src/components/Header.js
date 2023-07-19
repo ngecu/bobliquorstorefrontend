@@ -93,7 +93,7 @@ const Header = () => {
               {userInfo ? (
                     <LinkContainer to='/my-account/'>
                     <Nav.Link>
-                    <div className="icon-text-wrapper">
+                    <div className="icon-text-wrapper" data-count={cartItems.length}>
                       <i className='fas fa-user'></i> 
                       <span>Account</span>
                     </div>

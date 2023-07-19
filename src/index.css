@@ -125,7 +125,7 @@ h2 {
   border-radius: 50%;
   padding: 10px;
   text-align: center;
-  /* font-size: 10px; */
+  font-size: 11px;
   font-weight: bold;
   width: 45px;
   height: 45px;
@@ -258,7 +258,10 @@ transition: all 0s,visibility 0s;
     display: none;
   }
 }
+.btn-filter{
 
+  display: none;
+}
 
 @media (max-width: 767px) {
   .navbar-nav {
@@ -322,6 +325,10 @@ transition: all 0s,visibility 0s;
   .ant-drawer-content-wrapper{
     width: 75vw !important;
   }
+
+  .btn-filter{
+    display: block;
+  }
  
 }
 
@@ -340,7 +347,8 @@ transition: all 0s,visibility 0s;
   color:white;
   }
 .ant-drawer-body{
-  padding: 0 !important;
+  /* padding: 0 !important; */
+  padding-left: 5% !important;
 }
 .dropdown-toggle::after {
   left: 85% !important;
@@ -351,4 +359,3 @@ transition: all 0s,visibility 0s;
 h6{
   margin-top: 1%;
 }
-  

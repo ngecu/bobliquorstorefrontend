@@ -1,24 +1,55 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Col, Container, Form, ListGroup, Row } from 'react-bootstrap'
-import { listProducts } from '../actions/productActions'
+import { Button, Col, Container, Form, Pagination, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Product from '../components/Product'
-import { Drawer } from 'antd'
+import { Drawer, Skeleton } from 'antd'
+import { getCategoryDetails } from '../actions/categoryActions'
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
 const CategoryProductsScreen = ({ match }) => {
     const categoryId = match.params.id
     const dispatch = useDispatch()
+    const [priceRange, setPriceRange] = useState([0, 1000]); // Default price range [minPrice, maxPrice]
+    const [brandings,setBrandings] = useState([])
+    const [products,setProducts] = useState([])
+    const [selectedBrandings, setSelectedBrandings] = useState([]);
+    const [sortingOption, setSortingOption] = useState('default'); // State to store the selected sorting option
+    const [sortedProducts, setSortedProducts] = useState([]); // State to store the sorted products
+    const categoryDetails = useSelector((state) => state.categoryDetails) 
+    const {category,loading, error}  =  categoryDetails
     
-    const productList = useSelector((state) => state.productList)
-    const { loading, error, products, page, pages } = productList
-  
+      // Handler function for clicking on branding checkboxes
+  const handleBrandingClick = (branding) => {
+    console.log(branding)
+    // Toggle the selected branding's state
+    setSelectedBrandings((prevSelected) =>
+      prevSelected.includes(branding)
+        ? prevSelected.filter((b) => b !== branding)
+        : [...prevSelected, branding]
+    );
+  };
+
+  const handlePriceRangeChange = (value) => {
+    setPriceRange(value);
+  };
+    
     useEffect(() => {
-        dispatch(listProducts())
-      }, [dispatch])
+      dispatch(getCategoryDetails(categoryId));
+    }, [dispatch, categoryId]);
+
+
+      useEffect(() => {
+        if (category) {
+          // Set the brandings state when the category is available
+          setBrandings(category?.category?.brandings);
+          setProducts(category?.products)
+        }
+      }, [category]);
 
       const [open, setOpen] = useState(false);
       const [placement, setPlacement] = useState('left');
-    
+      const [page,setPage] = useState(1)
       const showDrawer = () => {
         setOpen(true);
       };
@@ -27,12 +58,92 @@ const CategoryProductsScreen = ({ match }) => {
         setOpen(false);
       };
 
+
+      const getProductCountForBranding = (branding) => {
+        return products.filter((product) => product.branding === branding).length;
+      };
+
+      useEffect(() => {
+        // Update the product list whenever the sorting option changes
+        sortProducts();
+        console.log(products)
+      }, [sortingOption, products,selectedBrandings,priceRange]); // Call sortProducts whenever sortingOption or products change
+
+      const sortProducts = () => {
+        if (!products) return; 
+        // Implement the sorting logic based on the selected sorting option
+        // For example, you can use lodash to sort the products array using the sortingOption
+        // Here, we assume that products is an array of objects and you want to sort by the 'title' field.
+    
+        let sortedProducts = [...products]; // Create a copy of the products array to avoid modifying the original array
+    
+
+            // Filter products based on selected brandings
+    let filteredProducts = selectedBrandings.length
+    ? products.filter((product) =>
+        selectedBrandings.includes(product.branding)
+      )
+    : [...products]; // If no brandings are selected, show all products
+
+
+        switch (sortingOption) {
+          case 'title_asc':
+            sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+          case 'title_desc':
+            sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+          case 'date_desc':
+            sortedProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            break;
+          case 'price_asc':
+            sortedProducts.sort((a, b) => a.price - b.price);
+            break;
+          case 'price_desc':
+            sortedProducts.sort((a, b) => b.price - a.price);
+            break;
+          default:
+            // For the 'default' option, do nothing (keep the original order)
+            break;
+        }
+
+        // console.log(sortedProducts)
+    
+        // Update the sorted products in the state
+        setSortedProducts(sortedProducts);
+        if(filteredProducts){
+          setSortedProducts(filteredProducts);
+        }
+        
+      };
+    
+
+let active = 1;
+let items = [];
+for (let number = 1; number <= 5; number++) {
+  items.push(
+    <Pagination.Item key={number} active={number === active}>
+      {number}
+    </Pagination.Item>,
+  );
+}
+      
+
     return(
+
     <Container className='category-container'>
+       {loading ?  <Skeleton active /> : (
+        <>
     <Row className='category-row'>
         <Col md={2}>
-        <Form className="facetwp-sort">
-  <Form.Control as="select" className="facetwp-sort-select">
+        <Form className="facetwp-sort my-2">
+  <Form.Control 
+  value={sortingOption}
+  onChange={(e) => {
+    console.log(e.target.value)
+    setSortingOption(e.target.value)}}
+  as="select" 
+  className="facetwp-sort-select">
     <option value="default">Sort by</option>
     <option value="title_asc">Title (A-Z)</option>
     <option value="title_desc">Title (Z-A)</option>
@@ -43,86 +154,66 @@ const CategoryProductsScreen = ({ match }) => {
 </Form>
 
 
-<div id="text-25" className="facet-wrap widget widget_text">
-  <div className="gamma widget-title">Categories</div>
+<div id="text-25" className="facet-wrap widget widget_text my-2">
+<h6 className="gamma widget-title">Categories</h6>
   <div className="textwidget">
     <div className="facetwp-facet facetwp-facet-categories facetwp-type-checkboxes" data-name="categories" data-type="checkboxes">
-      <div className="facetwp-checkbox" data-value="red-wine">
-        <input type="checkbox" />
-        <label>Red Wine <span className="facetwp-counter">(94)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="white-wine">
-        <input type="checkbox" />
-        <label>White Wine <span className="facetwp-counter">(77)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="red-sweet-wine">
-        <input type="checkbox" />
-        <label>Red Sweet Wine <span className="facetwp-counter">(31)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="sparkling-wine">
-        <input type="checkbox" />
-        <label>Sparkling Wine <span className="facetwp-counter">(29)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="rose-wine">
-        <input type="checkbox" />
-        <label>Rosé Wine <span className="facetwp-counter">(21)</span></label>
-      </div>
-      <div className="facetwp-overflow facetwp-hidden">
-        <div className="facetwp-checkbox" data-value="sweet-white-wine">
-          <input type="checkbox" />
-          <label>Sweet White Wine <span className="facetwp-counter">(15)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="non-alcoholic-sparkling">
-          <input type="checkbox" />
-          <label>Non-Alcoholic Sparkling <span className="facetwp-counter">(9)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="champagne">
-          <input type="checkbox" />
-          <label>Champagne <span className="facetwp-counter">(6)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="flavoured-wine">
-          <input type="checkbox" />
-          <label>Flavoured Wine <span className="facetwp-counter">(4)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="prosecco">
-          <input type="checkbox" />
-          <label>Prosecco <span className="facetwp-counter">(3)</span></label>
-        </div>
-      </div>
+        {brandings &&
+          brandings.map((branding) => (
+            <div
+              className="facetwp-checkbox"            >
+              <input 
+               data-value={branding}
+               key={branding}
+               onClick={() => handleBrandingClick(branding)}
+              type="checkbox" />
+              <label>
+                {branding}{" "}
+                <span className="facetwp-counter">
+                  ({getProductCountForBranding(branding)})
+                </span>
+              </label>
+            </div>
+          ))}
+    
     </div>
   </div>
 </div>
 
-
+<div className='price-range-slider my-2'>
+<div id="text-25" className="facet-wrap widget widget_text">
+                <h6>Price Range</h6>
+                <Slider
+                  min={0}
+                  max={1000}
+                  range
+                  value={priceRange}
+                  onChange={handlePriceRangeChange}
+                />
+                <div className='slider-values'>
+                  <span>Min: {priceRange[0]}</span>
+                  <span>Max: {priceRange[1]}</span>
+                </div>
+              </div>
+              </div>
 
         </Col>
 
         <Col md={10} xs={12} sm={12}>
-        <Card style={{backgroundColor:"#EFEEE3"}}>
-            
-              <Col md={12} className='p-2'>
-              <>Nothing promises a good time like a good ol’ shot of tequila! Prized for its earthy undertones of blue agave, tequila’s enduring appeal lies in its complex flavor profiles and huge range of notes. Keep browsing for a list of different brands guaranteed to keep any tequila lover happy! Find the perfect bottle for any occasion and get it delivered to your home or office!</>
-              </Col>
-              {/* <Col md={2}>
-                <img src="https://www.oaks.delivery/wp-content/uploads/tequla-category.png" className='w-100' />
-              </Col> */}
-            
-          </Card>
+     
         <Row  >
 
        
         
 
         <Col md={0} xs={12}>
-          <Button className="w-100" onClick={showDrawer}>SHOW FILTERS</Button>
+          <h6>Discover the Finest {category?.category?.name} in Kenya</h6>
+          <Button className="w-100 btn-filter" onClick={showDrawer}>SHOW FILTERS</Button>
+          <Pagination className="mx-auto">{items}</Pagination>
         </Col>
-        {products
-  .filter((product) => product.category === categoryId) // Filter products by category
-  .map((product) => (
-    <Col key={product._id} sm={6} xs={6} md={6} lg={4} xl={3}>
-      <Product product={product} />
-    </Col>
-  ))}
+
+
+       <>{sortedProducts?.map((product)=> <Col md={3} xs={6} > <Product product={product} /> </Col>)}</>
 
           </Row>
 
@@ -138,9 +229,16 @@ const CategoryProductsScreen = ({ match }) => {
         key={placement}
       >
        <Row>
-       <Col md={12}>
-        <Form className="facetwp-sort">
-  <Form.Control as="select" className="facetwp-sort-select">
+       <Col md={8} xs={8}>
+      
+       <Form className="facetwp-sort my-2">
+  <Form.Control 
+  value={sortingOption}
+  onChange={(e) => {
+    console.log(e.target.value)
+    setSortingOption(e.target.value)}}
+  as="select" 
+  className="facetwp-sort-select">
     <option value="default">Sort by</option>
     <option value="title_asc">Title (A-Z)</option>
     <option value="title_desc">Title (Z-A)</option>
@@ -151,64 +249,60 @@ const CategoryProductsScreen = ({ match }) => {
 </Form>
 
 
-<div id="text-25" className="facet-wrap widget widget_text">
-  <div className="gamma widget-title">Categories</div>
+<div id="text-25" className="facet-wrap widget widget_text my-2">
+<h6 className="gamma widget-title">Categories</h6>
   <div className="textwidget">
     <div className="facetwp-facet facetwp-facet-categories facetwp-type-checkboxes" data-name="categories" data-type="checkboxes">
-      <div className="facetwp-checkbox" data-value="red-wine">
-        <input type="checkbox" />
-        <label>Red Wine <span className="facetwp-counter">(94)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="white-wine">
-        <input type="checkbox" />
-        <label>White Wine <span className="facetwp-counter">(77)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="red-sweet-wine">
-        <input type="checkbox" />
-        <label>Red Sweet Wine <span className="facetwp-counter">(31)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="sparkling-wine">
-        <input type="checkbox" />
-        <label>Sparkling Wine <span className="facetwp-counter">(29)</span></label>
-      </div>
-      <div className="facetwp-checkbox" data-value="rose-wine">
-        <input type="checkbox" />
-        <label>Rosé Wine <span className="facetwp-counter">(21)</span></label>
-      </div>
-      <div className="facetwp-overflow facetwp-hidden">
-        <div className="facetwp-checkbox" data-value="sweet-white-wine">
-          <input type="checkbox" />
-          <label>Sweet White Wine <span className="facetwp-counter">(15)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="non-alcoholic-sparkling">
-          <input type="checkbox" />
-          <label>Non-Alcoholic Sparkling <span className="facetwp-counter">(9)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="champagne">
-          <input type="checkbox" />
-          <label>Champagne <span className="facetwp-counter">(6)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="flavoured-wine">
-          <input type="checkbox" />
-          <label>Flavoured Wine <span className="facetwp-counter">(4)</span></label>
-        </div>
-        <div className="facetwp-checkbox" data-value="prosecco">
-          <input type="checkbox" />
-          <label>Prosecco <span className="facetwp-counter">(3)</span></label>
-        </div>
-      </div>
-      <a className="facetwp-toggle">See 5 more</a>
-      <a className="facetwp-toggle facetwp-hidden">See less</a>
+        {brandings &&
+          brandings.map((branding) => (
+            <div
+              className="facetwp-checkbox"            >
+              <input 
+               data-value={branding}
+               key={branding}
+               onClick={() => handleBrandingClick(branding)}
+              type="checkbox" />
+              <label>
+                {branding}{" "}
+                <span className="facetwp-counter">
+                  ({getProductCountForBranding(branding)})
+                </span>
+              </label>
+            </div>
+          ))}
+    
     </div>
   </div>
 </div>
 
-
+<div className='price-range-slider my-2'>
+<div id="text-25" className="facet-wrap widget widget_text">
+                <h6>Price Range</h6>
+                <Slider
+                  min={0}
+                  max={1000}
+                  range
+                  value={priceRange}
+                  onChange={handlePriceRangeChange}
+                />
+                <div className='slider-values row'>
+                  <Col xs={6}>
+                  <span>Min: {priceRange[0]}</span>
+                  </Col>
+                  <Col xs={6}>
+                    <span>Max: {priceRange[1]}</span>
+                  </Col>
+                </div>
+              </div>
+              </div>
 
         </Col>
        </Row>
       </Drawer>
+      </>
+    )}
 
+    
     </Container>
 )
 }

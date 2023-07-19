@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Container, Card, CardDeck } from 'react-bootstrap'
@@ -36,6 +36,22 @@ const HomeScreen = ({ match }) => {
     dispatch(listCategories())
     dispatch(listProducts(keyword, pageNumber))
   }, [dispatch, keyword, pageNumber])
+
+
+  const scrollRef = useRef(null);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
+
 
   return (
     <>
@@ -106,7 +122,7 @@ const HomeScreen = ({ match }) => {
     `}
   </style>
   <Row className='flex-nowrap w-100'>
-    {products.map((product) => (
+    {products.reverse().map((product) => (
       <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className='px-1'>
         <Product product={product} />
       </Col>
@@ -141,7 +157,7 @@ const HomeScreen = ({ match }) => {
       }
     `}
   </style>
-  <Row className='w-100'>
+  <Row className='flex-nowrap w-100'>
   {products
     .filter((product) => product.category === i._id)
     .map((product) => (
