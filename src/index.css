@@ -356,9 +356,15 @@ transition: all 0s,visibility 0s;
 .dropdown-toggle::after {
   left: 85% !important;
 }
-.product-card{
-  box-shadow:  none !important;
+.product-card {
+   box-shadow: none ;
+  transition: box-shadow 0.8s ease;
 }
+.product-card:hover {
+  /* Apply the hover effect box-shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.14);
+}
+
 .product-card.card .card-body{
   padding :0 !important;
 }

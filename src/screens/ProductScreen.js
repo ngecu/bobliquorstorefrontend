@@ -128,7 +128,8 @@ const ProductScreen = ({ history, match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>Price: Ksh.{product.price}</ListGroup.Item>
                 <ListGroup.Item>
-                  Description: {parse(product.description)}
+                  Description: {parse(`${product?.description}`)}
+  
                 </ListGroup.Item>
               </ListGroup>
 
