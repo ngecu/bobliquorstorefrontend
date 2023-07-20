@@ -207,7 +207,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     }
     
-    const { data } = await axios.get(`http://localhost:5000/api/users/${id}`, config)
+    const { data } = await axios.get(`https://bobliquorstoreapi.onrender.com/api/users/${id}`, config)
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -245,7 +245,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(`http://localhost:5000/api/users/profile`, user, config)
+    const { data } = await axios.put(`https://bobliquorstoreapi.onrender.com/api/users/profile`, user, config)
 
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,
