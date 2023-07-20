@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Card, Button, Form, Container } from 'react-bootstrap'
+import { Table,Row, Col, Image, ListGroup, Card, Button, Form, Container } from 'react-bootstrap'
+import { Drawer, Progress } from 'antd';
 import Rating from '../components/Rating'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Meta from '../components/Meta'
+import { addToWish } from '../actions/wishActions';
 import {
   listProductDetails,
   createProductReview,
 } from '../actions/productActions'
 import parse from 'html-react-parser';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import { addToCart, removeFromCart } from '../actions/cartActions';
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
