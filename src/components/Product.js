@@ -87,7 +87,7 @@ const Product = ({ product }) => {
         <Card.Img variant="top" src={product.image} alt={product.name} />
         {isHovered && (
           <div className="wishlist-icon" onClick={(e)=>handleWishlistAdd(product)}>
-            <i className="fas fa-heart"></i>
+            <i className="fas fa-heart bg-sucess"></i>
           </div>
         )}
         {discountPercentage > 0 && (
