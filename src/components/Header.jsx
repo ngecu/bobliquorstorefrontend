@@ -193,7 +193,7 @@ const Header = () => {
         
       >
         <div className='bg-dark text-light text-white p-2'>
-          {userInfo ? <div data-letters={userInfo.name[0]}> {userInfo.name}</div> : <div data-letters="AU"> Anonymous User</div>}
+          {userInfo ? <div data-letters={userInfo?.name[0]}> {userInfo?.name}</div> : <div data-letters="AU"> Anonymous User</div>}
             <p>CALL US 0792677146</p>
         </div>
        
