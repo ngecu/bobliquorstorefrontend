@@ -163,7 +163,7 @@ const ProfileScreen = () => {
       <Col md={9}>
       {pathname === '/my-account/' && (
         <>
-      Hello <b><strong>{user.email}</strong></b> (not {user.email} <Link onClick={logoutHandler}>Log out </Link>)
+      Hello <b><strong>{user?.email}</strong></b> (not {user?.email} <Link onClick={logoutHandler}>Log out </Link>)
 
 From your account dashboard you can view your <Link to="/orders">recent orders</Link>, manage your <Link to="edit-address"> shipping and billing </Link> addresses, and <Link to="/edit-account"> edit your password and account details.</Link>
         {/* <h2>My Orders</h2>

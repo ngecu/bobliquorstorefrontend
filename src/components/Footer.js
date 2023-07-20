@@ -106,7 +106,7 @@ const Footer = () => {
                       // text={`${product.numReviews} reviews`}
                     />
                   </Col>
-                  <Col md={10} xs={2}>
+                  <Col md={2} xs={2}>
                     <Image src={product.image} alt={product.name} fluid width={50} />
                   </Col>
                 </Row>
