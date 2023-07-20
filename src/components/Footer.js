@@ -81,7 +81,7 @@ const Footer = () => {
               <p className="text-uppercase fw-bold mb-4">
                 Recent Events
               </p>
-              {events.length === 0 ? (
+              {events?.length === 0 ? (
   <p className="text-danger">No events available.</p>
 ) : (
   events?.slice(0, 2).map((event) => (
