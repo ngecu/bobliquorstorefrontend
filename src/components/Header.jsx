@@ -9,7 +9,7 @@ import { Home, Favorite, AccountCircle, ShoppingCart } from '@material-ui/icons'
 import { Drawer } from 'antd'
 import { listCategories } from '../actions/categoryActions'
 import { Link } from 'react-router-dom'
-
+import logourl from '../assets/logo.png'
 const Header = () => {
   const dispatch = useDispatch()
 
@@ -53,7 +53,7 @@ const Header = () => {
           <LinkContainer to='/'>
             <Navbar.Brand>
               {/* <img src="https://www.oaks.delivery/wp-content/uploads/onc-logo-svg-header.svg"/> */}
-            Drink&Chill</Navbar.Brand>
+            <img src={logourl} className='logo-header' /> Drink&Chill</Navbar.Brand>
           </LinkContainer>
           
          

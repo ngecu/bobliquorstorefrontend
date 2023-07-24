@@ -263,7 +263,14 @@ transition: all 0s,visibility 0s;
   display: none;
 }
 
+.logo-header{
+  height:70px
+}
+
 @media (max-width: 767px) {
+  .logo-header{
+    height:40px
+  }
   .navbar-nav {
     flex-direction: row;
   }
