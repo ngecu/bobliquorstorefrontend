@@ -40,16 +40,8 @@ const HomeScreen = ({ match }) => {
 
   const scrollRef = useRef(null);
 
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
-    }
+  const handleImageError = (e) => {
+    e.target.src = 'https://www.barschool.net/sites/default/files/styles/image_gallery_xl/public/2022-05/Cuba%20Libre.jpg?h=2d7bcac0&itok=pEsF8LVB';
   };
 
 
@@ -82,7 +74,7 @@ const HomeScreen = ({ match }) => {
                 <Link to={`/category/${category._id}`}>
                 <Card>
                 
-                  <Card.Img src={category.image} variant='top' />
+                <Card.Img src={category.image} variant='top' onError={handleImageError} />
                
 
                   <Card.Body className='text-center p-0'>
