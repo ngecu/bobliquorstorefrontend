@@ -53,7 +53,8 @@ const HomeScreen = ({ match }) => {
         <>
         {loading ? (
         <Skeleton active />):(
-          <img src={banners[0]?.url} className='w-100' />
+          <img src={banners[banners.length - 1]?.url} className='w-100' />
+
         )
         }
         </>

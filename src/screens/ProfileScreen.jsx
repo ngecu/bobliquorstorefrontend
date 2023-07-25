@@ -115,9 +115,9 @@ const ProfileScreen = () => {
           <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--orders">
             <Link to="/my-account/orders/">Orders</Link>
           </ListGroup.Item>
-          <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--purchased-products">
+          {/* <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--purchased-products">
             <Link to="/my-account/purchased-products/">Purchased Products</Link>
-          </ListGroup.Item>
+          </ListGroup.Item> */}
           <ListGroup.Item className="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--edit-account">
             <Link to="/my-account/edit-account/">Account details</Link>
           </ListGroup.Item>
@@ -226,7 +226,7 @@ From your account dashboard you can view your <Link to="/my-account/orders/">rec
       <Loader />
     ) : errorOrders ? (
       <Message variant='danger'>{errorOrders}</Message>
-    ) : orders.length === 0 ? (
+    ) : orders?.length === 0 ? (
       <Message>
         <p>No order has been made yet.</p>
         <p>
@@ -247,7 +247,7 @@ From your account dashboard you can view your <Link to="/my-account/orders/">rec
         </thead>
         <tbody>
           {orders
-            .filter((order) => order.isPaid) // Filter only the orders that have been paid
+            ?.filter((order) => order.isPaid) // Filter only the orders that have been paid
             .map((order) => (
               <tr key={order._id}>
                 <td>{order._id}</td>
