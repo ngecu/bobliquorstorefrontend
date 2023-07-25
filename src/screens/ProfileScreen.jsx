@@ -165,7 +165,7 @@ const ProfileScreen = () => {
         <>
       Hello <b><strong>{user?.email}</strong></b> (not {user?.email} <Link onClick={logoutHandler}>Log out </Link>)
 
-From your account dashboard you can view your <Link to="/orders">recent orders</Link>, manage your <Link to="edit-address"> shipping and billing </Link> addresses, and <Link to="/edit-account"> edit your password and account details.</Link>
+From your account dashboard you can view your <Link to="/my-account/orders/">recent orders</Link>, manage your shipping and billing addresses, and <Link to="/edit-account"> edit your password and account details.</Link>
         {/* <h2>My Orders</h2>
         {loadingOrders ? (
           <Loader />
@@ -217,66 +217,7 @@ From your account dashboard you can view your <Link to="/orders">recent orders</
         )} */}
         </>)}
 
-        {pathname === '/my-account/orders/' && (
-        <>
-                  <h2>My Orders</h2>
-        {loadingOrders ? (
-          <Loader />
-        ) : errorOrders ? (
-          <Message variant='danger'>{errorOrders}</Message>
-        ): orders.length === 0 ? (
-          <Message>
-            <p>No order has been made yet.</p>
-            <p>
-              <Link to="/">Browse Products</Link>
-            </p>
-          </Message>)
-         : (
-          <Table striped bordered hover responsive className='table-sm'>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>DATE</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
-                  <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer to={`/order/${order._id}`}>
-                      <Button className='btn-sm' variant='light'>
-                        Details
-                      </Button>
-                    </LinkContainer>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-        </>
-      )}
+  
 
 {pathname === '/my-account/purchased-products/' && (
   <>

@@ -266,8 +266,20 @@ transition: all 0s,visibility 0s;
 .logo-header{
   height:70px
 }
-
+.card-img-top.category-image {
+  height: 140px !important;
+  max-height: 140px !important;
+}
+.new-arrival .discount-badge{
+  display: none !important;
+}
 @media (max-width: 767px) {
+  .card-img-top.category-image {
+    height: 140px !important;
+    max-height: 140px !important;
+  }
+  
+
   .logo-header{
     height:40px
   }

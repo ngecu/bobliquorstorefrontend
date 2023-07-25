@@ -36,16 +36,18 @@ const CategoryEditScreen = ({ match, history }) => {
       dispatch({ type: CATEGORY_UPDATE_RESET })
       history.push('/my-account/categories/')
     } else {
-      if (!category.name || category._id !== categoryId) {
+      if (!category?.category?.name || category?.category?._id !== categoryId) {
         dispatch(getCategoryDetails(categoryId))
+        console.log(category)
       } else {
-        setName(category.name)
-        setDescription(category.description)
-        setImage(category.image)
-        setBrandings(category.brandings)
+        
+        setName(category.category.name)
+        setDescription(category.category.description)
+        setImage(category.category.image)
+        setBrandings(category.category.brandings)
       }
     }
-  }, [dispatch, history, categoryId, category, successUpdate])
+  }, [dispatch, history, categoryId, successUpdate])
 
   const handleAddInput = () => {
     setBrandings([...brandings, '']);

@@ -74,7 +74,7 @@ const HomeScreen = ({ match }) => {
                 <Link to={`/category/${category._id}`}>
                 <Card>
                 
-                <Card.Img src={category.image} variant='top' onError={handleImageError} />
+                <Card.Img src={category.image} className='category-image' variant='top' onError={handleImageError} />
                
 
                   <Card.Body className='text-center p-0'>
@@ -113,7 +113,7 @@ const HomeScreen = ({ match }) => {
       }
     `}
   </style>
-  <Row className='flex-nowrap w-100'>
+  <Row className='flex-nowrap w-100 new-arrival'>
     {products.reverse().map((product) => (
       <Col key={product._id} xs={6} sm={6} md={3} lg={3} xl={3} className='px-1'>
         <Product product={product} />

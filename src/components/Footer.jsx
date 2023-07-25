@@ -72,11 +72,11 @@ const Footer = () => {
 
       {/* Section: Links */}
       <section className="">
-        <Container className="text-md-start mt-5">
+        <Container className="text-md-start my-2 ">
           {/* Grid row */}
           <Row className="mt-3 w-100">
             {/* Grid column */}
-            <Col md="4" lg="4" xl="4" className="mx-auto mb-4">
+            <Col md={3} lg={3} xl={4} className="mx-auto mb-4">
               {/* Links */}
               <p className="text-uppercase fw-bold mb-4">
                 Recent Events
@@ -94,7 +94,7 @@ const Footer = () => {
             {/* Grid column */}
 
             {/* Grid column */}
-            <Col md="4" lg="4" xl="4" className="mx-auto mb-md-0 mb-4">
+            <Col md={3} lg={3} xl={4} className="mx-auto mb-md-0 mb-4">
               {/* Links */}
               <p className="text-uppercase fw-bold mb-4">Top Rated Products</p>
               {products?.slice(0, 2).map((product) => (
@@ -128,12 +128,21 @@ const Footer = () => {
       <Container>
 
       <Row className='w-100'>
-        <Col md={6} className='py-2'>
+        <Col md={3} className='py-2'>
         © Drink & Chill  2023
         <br/>
         Built with love by DevNgecu
         </Col>
-        <Col md={6}>
+
+        <Col md={3} className='py-2'>
+      
+        </Col>
+
+        <Col md={3} className='py-2'>
+      
+      </Col>
+
+        <Col md={3}>
           <Link className="text-danger" to="#">
           <i class="fas fa-phone"></i> 0792677146
           </Link>
